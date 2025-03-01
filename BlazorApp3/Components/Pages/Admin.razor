@@ -1,0 +1,16 @@
+﻿@page "/admin-dashboard"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+
+<PageTitle>Admin Side</PageTitle>
+
+<h1>Admin Area</h1>
+
+<div class="alert alert-success">
+    <h4>You are admin!</h4>
+    <p>Denne side er kun synlig for brugere med Admin-rollen.</p>
+</div>
+
+<AuthorizeView Roles="Admin">
+    <p>Her kan du administrere webapplikationen.</p>
+</AuthorizeView>
