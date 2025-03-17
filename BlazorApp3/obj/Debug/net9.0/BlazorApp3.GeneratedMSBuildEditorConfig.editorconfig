@@ -44,6 +44,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBY2NvdW50XFBhZ2VzXENvbmZpcm1FbWFpbENoYW5nZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Muchi/Desktop/SchoolProgramming/BlazorApp3/BlazorApp3/Components/Account/Pages/CprNr.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBY2NvdW50XFBhZ2VzXENwck5yLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Muchi/Desktop/SchoolProgramming/BlazorApp3/BlazorApp3/Components/Account/Pages/ExternalLogin.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBY2NvdW50XFBhZ2VzXEV4dGVybmFsTG9naW4ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
@@ -190,6 +194,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Muchi/Desktop/SchoolProgramming/BlazorApp3/BlazorApp3/Components/Pages/Auth.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBdXRoLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Muchi/Desktop/SchoolProgramming/BlazorApp3/BlazorApp3/Components/Pages/CheckConnection.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDaGVja0Nvbm5lY3Rpb24ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Muchi/Desktop/SchoolProgramming/BlazorApp3/BlazorApp3/Components/Pages/Counter.razor]

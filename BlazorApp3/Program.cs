@@ -27,9 +27,8 @@ builder.Services.AddAuthentication(options =>
 })
     .AddIdentityCookies();
 
-// Configure SQLite database
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite($"Data Source=BlazorApp3.db"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -70,8 +69,7 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-    // Create/migrate the database
-    db.Database.EnsureCreated();
+    db.Database.Migrate();
 
     // Set up roles and admin user
     var serviceProvider = scope.ServiceProvider;

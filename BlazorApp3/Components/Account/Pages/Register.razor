@@ -42,6 +42,16 @@
                 <label for="Input.ConfirmPassword">Confirm Password</label>
                 <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
             </div>
+            <div class="form-floating mb-3">
+                <InputSelect @bind-Value="Input.Role" id="Input.Role" class="form-control" aria-required="true">
+                    <option value="">Select a role</option>
+                    <option value="Admin">Admin</option>
+                    <option value="User">User</option>
+                </InputSelect>
+                <label for="Input.Role">Role</label>
+                <ValidationMessage For="() => Input.Role" class="text-danger" />
+            </div>
+
             <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </EditForm>
     </div>
@@ -141,5 +151,8 @@
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; } = "";
+
+        [Required(ErrorMessage = "Please select a role.")]
+        public string Role { get; set; }
     }
 }

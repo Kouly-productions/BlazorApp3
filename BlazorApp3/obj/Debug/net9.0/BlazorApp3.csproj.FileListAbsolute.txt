@@ -196,7 +196,6 @@ C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\obj\Debug\net9.0\
 C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.BlazorApp3.props
 C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.BlazorApp3.props
 C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\obj\Debug\net9.0\staticwebassets.pack.json
-C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\obj\Debug\net9.0\BlazorApp3.csproj.Up2Date
 C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\obj\Debug\net9.0\BlazorApp3.dll
 C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\obj\Debug\net9.0\refint\BlazorApp3.dll
@@ -231,3 +230,19 @@ C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\
 C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\runtimes\win-x86\native\e_sqlite3.dll
 C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\obj\Debug\net9.0\BlazorApp3.sourcelink.json
 C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\QRCoder.dll
+C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\Microsoft.Extensions.Caching.Abstractions.dll
+C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\Microsoft.Extensions.Logging.dll
+C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\Microsoft.Extensions.Options.dll
+C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\Microsoft.Extensions.Primitives.dll
+C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\System.Formats.Asn1.dll
+C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\System.Text.Json.dll
+C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

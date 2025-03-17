@@ -1,0 +1,35 @@
+﻿@page "/s"
+@rendermode InteractiveServer
+@using BlazorApp3.Data
+
+<PageTitle>Database Test</PageTitle>
+
+<h1>Database Connection Test</h1>
+
+<p role="status">@Message</p>
+
+<button class="btn btn-primary" @onclick="CheckDatabaseConnection">Test Connection</button>
+
+@code {
+    private string Message = "Click the button to test the connection.";
+
+    [Inject] private ApplicationDbContext DbContext { get; set; }
+
+    private async Task CheckDatabaseConnection()
+    {
+        Message = "🔄 Testing connection...";
+        await InvokeAsync(StateHasChanged); // Ensures UI updates immediately
+
+        try
+        {
+            bool canConnect = await DbContext.Database.CanConnectAsync();
+            Message = canConnect ? "✅ Connection Successful!" : "❌ Connection Failed!";
+        }
+        catch (Exception ex)
+        {
+            Message = $"❌ Error: {ex.Message}";
+        }
+
+        await InvokeAsync(StateHasChanged); // Ensures UI updates
+    }
+}

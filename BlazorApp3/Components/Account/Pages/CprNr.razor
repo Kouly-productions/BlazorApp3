@@ -1,0 +1,37 @@
+﻿@page "/Account/CprNr"
+
+<h3>Enter Your CPR Number</h3>
+
+<EditForm Model="this">
+    <DataAnnotationsValidator />
+    <div>
+        <label for="cpr">CPR Number:</label>
+        <InputText @bind-Value="CprNumber" id="cpr" @oninput="ValidateInput" maxlength="10" />
+    </div>
+    <br />
+    <button @onclick="Confirm" class="w-100 btn btn-lg btn-primary">Confirm</button>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(ConfirmationMessage))
+{
+        <p>@ConfirmationMessage</p>
+}
+
+@code {
+    private string CprNumber { get; set; } = "";
+    private string ConfirmationMessage { get; set; } = "";
+
+    private void ValidateInput(ChangeEventArgs e)
+    {
+        string input = e.Value?.ToString() ?? "";
+        CprNumber = new string(input.Where(char.IsDigit).ToArray());
+    }
+
+    private void Confirm()
+    {
+        if (CprNumber.Length == 10)
+        {
+            ConfirmationMessage = "CPR Number Confirmed: " + CprNumber;
+        }
+    }
+}
