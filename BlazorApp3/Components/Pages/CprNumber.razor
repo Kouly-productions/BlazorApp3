@@ -1,0 +1,168 @@
+﻿@page "/cprnumber"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using BlazorApp3.Data
+@using System.Security.Claims
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Http
+@using Microsoft.EntityFrameworkCore
+@inject UserManager<ApplicationUser> UserManager
+@inject ApplicationDbContext DbContext
+@inject NavigationManager NavigationManager
+@attribute [Authorize]
+
+<PageTitle>CPR Number</PageTitle>
+<h1>CPR Number Registration</h1>
+
+@if (!string.IsNullOrEmpty(debugInfo))
+{
+        <div class="alert alert-info">
+            <strong>Debug Info:</strong> @debugInfo
+        </div>
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3>Welcome @UserName</h3>
+                <p>Your roles: @UserRoles</p>
+            </div>
+            <div class="card-body">
+                @if (!string.IsNullOrEmpty(errorMessage))
+                {
+                        <div class="alert alert-danger">
+                        @errorMessage
+                        </div>
+                }
+
+                <div class="form-group mb-3">
+                    <label for="cprNumber">Please enter your CPR number:</label>
+                    <input type="text" id="cprNumber" @bind="cprNumber" class="form-control" />
+                    @if (showValidationError)
+                    {
+                            <div class="text-danger">CPR number must be exactly 10 digits</div>
+                    }
+                </div>
+                <button @onclick="SubmitCprNumber" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string cprNumber = "";
+    private string UserId = "";
+    private string UserName = "";
+    private string UserRoles = "";
+    private string errorMessage = "";
+    private string debugInfo = "";
+    private bool showValidationError = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = await UserManager.GetUserAsync(Context.User);
+        if (user != null)
+        {
+            UserId = user.Id;
+            UserName = user.UserName ?? "";
+            var roles = await UserManager.GetRolesAsync(user);
+            UserRoles = string.Join(", ", roles);
+
+            debugInfo += $"User authenticated: {UserId} | ";
+
+            var existingCpr = await DbContext.CprInfos.FindAsync(UserId);
+            if (existingCpr != null)
+            {
+                cprNumber = existingCpr.CprNumber;
+                debugInfo += $"Existing CPR found: {existingCpr.CprNumber}";
+            }
+            else
+            {
+                debugInfo += "No existing CPR found";
+            }
+        }
+        else
+        {
+            debugInfo = "User not authenticated";
+        }
+    }
+
+    private async Task SubmitCprNumber()
+    {
+        errorMessage = "";
+        showValidationError = false;
+        debugInfo = "Submit button clicked | ";
+
+        // Validate CPR format
+        if (string.IsNullOrWhiteSpace(cprNumber) || !System.Text.RegularExpressions.Regex.IsMatch(cprNumber, @"^\d{10}$"))
+        {
+            showValidationError = true;
+            debugInfo += "Validation failed: CPR must be 10 digits";
+            return;
+        }
+
+        debugInfo += $"CPR validation passed: {cprNumber} | ";
+
+        // Check if CPR already exists
+        var existingCpr = await DbContext.CprInfos.FindAsync(UserId);
+        if (existingCpr != null)
+        {
+            debugInfo += $"Found existing CPR: {existingCpr.CprNumber} | ";
+
+            // Validate the CPR
+            if (existingCpr.CprNumber == cprNumber)
+            {
+                debugInfo += "CPR matches! Redirecting to todolist";
+
+                NavigationManager.NavigateTo("/todolist");
+            }
+            else
+            {
+                // CPR doesn't match
+                debugInfo += "CPR doesn't match records";
+                errorMessage = "The CPR number doesn't match our records";
+            }
+        }
+        else
+        {
+            debugInfo += "Creating new CPR entry | ";
+
+            // New CPR entry
+            var cprInfo = new CprInfo
+                {
+                    UserId = UserId,
+                    CprNumber = cprNumber,
+                    CreatedAt = DateTime.Now
+                };
+
+            try
+            {
+                DbContext.CprInfos.Add(cprInfo);
+                await DbContext.SaveChangesAsync();
+                debugInfo += "SaveChangesAsync completed | ";
+
+                // Verify it was saved
+                var verifyInfo = await DbContext.CprInfos.FindAsync(UserId);
+                if (verifyInfo != null)
+                {
+                    debugInfo += $"CPR saved successfully: {verifyInfo.CprNumber} | ";
+                    NavigationManager.NavigateTo("/todolist");
+                }
+                else
+                {
+                    debugInfo += "WARNING: CPR NOT SAVED! | ";
+                    errorMessage = "Failed to save your CPR number. Please try again.";
+                }
+            }
+            catch (Exception ex)
+            {
+                debugInfo += $"ERROR: {ex.Message} | ";
+                errorMessage = "An error occurred while saving your CPR number.";
+            }
+        }
+    }
+
+    [CascadingParameter]
+    private HttpContext Context { get; set; } = default!;
+}

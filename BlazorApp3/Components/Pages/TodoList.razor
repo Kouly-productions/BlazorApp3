@@ -1,0 +1,167 @@
+﻿@page "/todolist"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using BlazorApp3.Data
+@using Microsoft.EntityFrameworkCore
+@using BlazorApp3.Components.Account.Shared
+@inject UserManager<ApplicationUser> UserManager
+@inject ApplicationDbContext DbContext
+@attribute [Authorize]
+
+<PageTitle>Todo List</PageTitle>
+
+
+<RequireCpr>
+    <PageTitle>Todo List</PageTitle>
+        <h1>Todo List</h1>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Add New Task</h3>
+                    </div>
+                    <div class="card-body">
+                        <EditForm Model="@newTodo" OnValidSubmit="AddTodoItem" FormName="addTodoForm">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+
+                            <div class="form-group mb-3">
+                                <label for="title">Title:</label>
+                                <InputText id="title" @bind-Value="newTodo.Title" class="form-control" />
+                                <ValidationMessage For="@(() => newTodo.Title)" />
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="description">Description:</label>
+                                <InputTextArea id="description" @bind-Value="newTodo.Description" class="form-control" />
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Add Task</button>
+                        </EditForm>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Your Tasks</h3>
+                    </div>
+                    <div class="card-body">
+                        @if (todoItems == null)
+                        {
+                                    <p><em>Loading...</em></p>
+                        }
+                        else if (!todoItems.Any())
+                        {
+                                    <p>No tasks yet. Add your first task!</p>
+                        }
+                        else
+                        {
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Title</th>
+                                                <th>Description</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                    @foreach (var item in todoItems)
+                                    {
+                                                        <tr>
+                                                            <td>@item.Title</td>
+                                                            <td>@item.Description</td>
+                                                            <td>
+                                                @if (item.IsCompleted)
+                                                {
+                                                                            <span class="badge bg-success">Completed</span>
+                                                }
+                                                else
+                                                {
+                                                                            <span class="badge bg-warning">Pending</span>
+                                                }
+                                                            </td>
+                                                            <td>
+                                                                <button class="btn btn-sm @(item.IsCompleted ? "btn-warning" : "btn-success")" 
+                                                                        @onclick="() => ToggleStatus(item)">
+                                                    @(item.IsCompleted ? "Mark Pending" : "Mark Complete")
+                                                                </button>
+                                                                <button class="btn btn-sm btn-danger" @onclick="() => DeleteTodo(item)">
+                                                                    Delete
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                    }
+                                        </tbody>
+                                    </table>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+</RequireCpr>
+
+@code {
+    private List<TodoItem>? todoItems;
+    private TodoItem newTodo = new TodoItem();
+    private string userId = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = await UserManager.GetUserAsync(Context.User);
+        if (user != null)
+        {
+            userId = user.Id;
+            await LoadTodoItems();
+        }
+    }
+
+    private async Task LoadTodoItems()
+    {
+        todoItems = await DbContext.TodoItems
+            .Where(t => t.UserId == userId)
+            .OrderByDescending(t => t.CreatedAt)
+            .ToListAsync();
+    }
+
+    private async Task AddTodoItem()
+    {
+        if (string.IsNullOrWhiteSpace(newTodo.Title))
+            return;
+
+        var todoItem = new TodoItem
+            {
+                Title = newTodo.Title,
+                Description = newTodo.Description,
+                IsCompleted = false,
+                CreatedAt = DateTime.Now,
+                UserId = userId
+            };
+
+        DbContext.TodoItems.Add(todoItem);
+        await DbContext.SaveChangesAsync();
+
+        newTodo = new TodoItem(); // Reset the form
+        await LoadTodoItems(); // Refresh the list
+    }
+
+    private async Task ToggleStatus(TodoItem item)
+    {
+        item.IsCompleted = !item.IsCompleted;
+        DbContext.TodoItems.Update(item);
+        await DbContext.SaveChangesAsync();
+    }
+
+    private async Task DeleteTodo(TodoItem item)
+    {
+        DbContext.TodoItems.Remove(item);
+        await DbContext.SaveChangesAsync();
+        await LoadTodoItems(); // Refresh the list
+    }
+
+    [CascadingParameter]
+    private HttpContext Context { get; set; } = default!;
+}

@@ -1,0 +1,102 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using BlazorApp3.Data
+@using Microsoft.AspNetCore.Http
+@using Microsoft.EntityFrameworkCore
+@inject UserManager<ApplicationUser> UserManager
+@inject ApplicationDbContext DbContext
+@inject NavigationManager NavigationManager
+
+@if (!string.IsNullOrEmpty(debugInfo))
+{
+        <div class="alert alert-info">
+            <strong>RequireCpr Debug:</strong> @debugInfo
+        </div>
+}
+
+@code {
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    private bool cprVerified = false;
+    private bool initialized = false;
+    private string debugInfo = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        debugInfo = "Starting verification... | ";
+
+        if (HttpContext.User.Identity?.IsAuthenticated == true)
+        {
+            debugInfo += $"User authenticated: {HttpContext.User.Identity.Name} | ";
+
+            var user = await UserManager.GetUserAsync(HttpContext.User);
+            if (user != null)
+            {
+                debugInfo += $"User found: {user.Id} | ";
+
+                var cprInfo = await DbContext.CprInfos.FindAsync(user.Id);
+                if (cprInfo != null)
+                {
+                    debugInfo += $"CPR found: {cprInfo.CprNumber} | ";
+                    cprVerified = true;
+                }
+                else
+                {
+                    debugInfo += "No CPR found | ";
+
+                    // Try listing all CPR entries
+                    var allCprs = await DbContext.CprInfos.ToListAsync();
+                    debugInfo += $"Total CPR entries: {allCprs.Count} | ";
+                    if (allCprs.Count > 0)
+                    {
+                        debugInfo += "Users with CPR: ";
+                        foreach (var cpr in allCprs.Take(3)) // Show up to 3 entries
+                        {
+                            debugInfo += $"{cpr.UserId}={cpr.CprNumber}, ";
+                        }
+                        if (allCprs.Count > 3)
+                        {
+                            debugInfo += "...";
+                        }
+                    }
+                }
+            }
+            else
+            {
+                debugInfo += "User not found | ";
+            }
+        }
+        else
+        {
+            debugInfo += "User not authenticated | ";
+        }
+
+        initialized = true;
+        debugInfo += $"Initialized: {initialized}, Verified: {cprVerified}";
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender && initialized && !cprVerified)
+        {
+            NavigationManager.NavigateTo("/cprnumber", forceLoad: true);
+        }
+    }
+}
+
+@if (!initialized)
+{
+        <p>Loading...</p>
+}
+else if (cprVerified)
+{
+    @ChildContent
+}
+else
+{
+        <p>Redirecting to CPR verification...</p>
+}

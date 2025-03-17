@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using BlazorApp3.Components;
 using BlazorApp3.Components.Account;
 using BlazorApp3.Data;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,15 @@ builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 
+// Add session services
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 // Add authorization services
 builder.Services.AddAuthorization();
 
@@ -28,8 +38,10 @@ builder.Services.AddAuthentication(options =>
     .AddIdentityCookies();
 
 // Configure SQLite database
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite($"Data Source=BlazorApp3.db"));
+builder.Services.AddDbContext<ApplicationDbContext>(options => {
+    options.UseSqlite($"Data Source=BlazorApp3.db");
+    options.ReplaceService<IModelCustomizer, SqliteModelCustomizer>();
+});
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -63,6 +75,8 @@ builder.Services.Configure<IdentityOptions>(options =>
 // Required for email confirmation - using a no-op implementation for development
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
+builder.Services.AddScoped<RoleManager<IdentityRole>>();
+
 var app = builder.Build();
 
 // Create database and initialize admin role/user
@@ -70,7 +84,6 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-    // Create/migrate the database
     db.Database.EnsureCreated();
 
     // Set up roles and admin user
@@ -101,6 +114,9 @@ using (var scope = app.Services.CreateScope())
         await userManager.AddToRoleAsync(adminUser, "Admin");
     }
 }
+
+// Then in the app configuration section:
+app.UseSession();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -6,8 +6,10 @@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.WebUtilities
 @using BlazorApp3.Data
+@using Microsoft.EntityFrameworkCore
 
 @inject UserManager<ApplicationUser> UserManager
+@inject RoleManager<IdentityRole> RoleManager
 @inject IUserStore<ApplicationUser> UserStore
 @inject SignInManager<ApplicationUser> SignInManager
 @inject IEmailSender<ApplicationUser> EmailSender
@@ -42,6 +44,15 @@
                 <label for="Input.ConfirmPassword">Confirm Password</label>
                 <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
             </div>
+            <div class="form-floating mb-3">
+                <InputSelect @bind-Value="Input.Role" id="Input.Role" class="form-control">
+                    @foreach (var role in availableRoles)
+                    {
+                            <option value="@role">@role</option>
+                    }
+                </InputSelect>
+                <label for="Input.Role">Role</label>
+            </div>
             <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </EditForm>
     </div>
@@ -56,6 +67,7 @@
 
 @code {
     private IEnumerable<IdentityError>? identityErrors;
+    private List<string> availableRoles = new List<string>();
 
     [SupplyParameterFromForm]
     private InputModel Input { get; set; } = new();
@@ -64,6 +76,24 @@
     private string? ReturnUrl { get; set; }
 
     private string? Message => identityErrors is null ? null : $"Error: {string.Join(", ", identityErrors.Select(error => error.Description))}";
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Get all roles for dropdown
+        availableRoles = await RoleManager.Roles.Select(r => r.Name).ToListAsync();
+
+        // If no roles in database, add default
+        if (!availableRoles.Any())
+        {
+            availableRoles.Add("User");
+        }
+
+        // Set default role
+        if (string.IsNullOrEmpty(Input.Role))
+        {
+            Input.Role = availableRoles.First();
+        }
+    }
 
     public async Task RegisterUser(EditContext editContext)
     {
@@ -82,6 +112,12 @@
 
         Logger.LogInformation("User created a new account with password.");
 
+        // Add user to selected role
+        if (!string.IsNullOrEmpty(Input.Role))
+        {
+            await UserManager.AddToRoleAsync(user, Input.Role);
+        }
+
         var userId = await UserManager.GetUserIdAsync(user);
         var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -97,9 +133,12 @@
                 "Account/RegisterConfirmation",
                 new() { ["email"] = Input.Email, ["returnUrl"] = ReturnUrl });
         }
-
-        await SignInManager.SignInAsync(user, isPersistent: false);
-        RedirectManager.RedirectTo(ReturnUrl);
+        else
+        {
+            // Sign in the user and redirect to CPR page
+            await SignInManager.SignInAsync(user, isPersistent: false);
+            RedirectManager.RedirectTo("cprnumber"); // Redirect to CPR page
+        }
     }
 
     private ApplicationUser CreateUser()
@@ -141,5 +180,9 @@
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; } = "";
+
+        [Required]
+        [Display(Name = "Role")]
+        public string Role { get; set; } = "User";
     }
 }
