@@ -15,6 +15,7 @@
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 @inject RoleManager<IdentityRole> RoleManager
+@inject TodoDbContext TodoDb
 
 <PageTitle>Register</PageTitle>
 
@@ -32,6 +33,11 @@
                 <InputText @bind-Value="Input.Email" id="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
                 <label for="Input.Email">Email</label>
                 <ValidationMessage For="() => Input.Email" class="text-danger" />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="Input.CprNumber" id="Input.CprNumber" class="form-control" aria-required="true" placeholder="1234567890" maxlength="10" />
+                <label for="Input.CprNumber">CPR Number</label>
+                <ValidationMessage For="() => Input.CprNumber" class="text-danger" />
             </div>
             <div class="form-floating mb-3">
                 <InputText type="password" @bind-Value="Input.Password" id="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
@@ -78,6 +84,13 @@
 
     public async Task RegisterUser(EditContext editContext)
     {
+        // Validate CPR is exactly 10 digits
+        if (!Input.CprNumber.All(char.IsDigit) || Input.CprNumber.Length != 10)
+        {
+            identityErrors = new[] { new IdentityError { Description = "CPR Number must be exactly 10 digits." } };
+            return;
+        }
+
         var user = CreateUser();
 
         await UserStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
@@ -93,7 +106,7 @@
 
         Logger.LogInformation("User created a new account with password.");
 
-        // Add the user to the selected role - THIS WAS MISSING
+        // Add the user to the selected role
         if (!string.IsNullOrEmpty(Input.Role))
         {
             // Ensure the role exists
@@ -107,7 +120,21 @@
             Logger.LogInformation("User added to role: {Role}", Input.Role);
         }
 
+        // Save CPR number to the database
         var userId = await UserManager.GetUserIdAsync(user);
+
+        var cprRecord = new CprRecord
+            {
+                UserId = userId,
+                CprNumber = Input.CprNumber,
+                CreatedDate = DateTime.Now
+            };
+
+        await TodoDb.CprRecords.AddAsync(cprRecord);
+        await TodoDb.SaveChangesAsync();
+
+        Logger.LogInformation("CPR record saved for user: {UserId}", userId);
+
         var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
         var callbackUrl = NavigationManager.GetUriWithQueryParameters(
@@ -155,6 +182,12 @@
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; } = "";
+
+        [Required]
+        [StringLength(10, ErrorMessage = "The {0} must be exactly 10 digits.", MinimumLength = 10)]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "The {0} must contain only digits.")]
+        [Display(Name = "CPR Number")]
+        public string CprNumber { get; set; } = "";
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
