@@ -4,11 +4,14 @@
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Identity
 @using BlazorApp3.Data
+@using Microsoft.EntityFrameworkCore
 
 @inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @inject ILogger<Login> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
+@inject TodoDbContext TodoDb
 
 <PageTitle>Log in</PageTitle>
 
@@ -31,6 +34,16 @@
                     <InputText type="password" @bind-Value="Input.Password" id="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
                     <label for="Input.Password" class="form-label">Password</label>
                     <ValidationMessage For="() => Input.Password" class="text-danger" />
+                </div>
+                <div class="form-floating mb-3">
+                    <InputText @bind-Value="Input.CprNumber" 
+                               id="Input.CprNumber" 
+                               class="form-control" 
+                               placeholder="1234567890" 
+                               aria-required="true" 
+                               maxlength="10" />
+                    <label for="Input.CprNumber" class="form-label">CPR Number</label>
+                    <ValidationMessage For="() => Input.CprNumber" class="text-danger" />
                 </div>
                 <div class="checkbox mb-3">
                     <label class="form-label">
@@ -87,19 +100,46 @@
 
     public async Task LoginUser()
     {
-        // This doesn't count login failures towards account lockout
-        // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-        var result = await SignInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+        // Find the user by email
+        var user = await UserManager.FindByEmailAsync(Input.Email);
+        if (user == null)
+        {
+            errorMessage = "Invalid login attempt.";
+            return;
+        }
+
+        // Check the password without signing in
+        var result = await SignInManager.CheckPasswordSignInAsync(user, Input.Password, lockoutOnFailure: false);
         if (result.Succeeded)
         {
-            Logger.LogInformation("User logged in.");
-            RedirectManager.RedirectTo(ReturnUrl);
+            // Check the CPR number
+            var cprRecord = await TodoDb.CprRecords.FirstOrDefaultAsync(c => c.UserId == user.Id);
+            if (cprRecord != null && cprRecord.CprNumber == Input.CprNumber)
+            {
+                // All credentials match, sign in the user
+                await SignInManager.SignInAsync(user, Input.RememberMe);
+                Logger.LogInformation("User logged in.");
+                RedirectManager.RedirectTo(ReturnUrl);
+            }
+            else
+            {
+                errorMessage = "Invalid CPR number.";
+            }
         }
         else if (result.RequiresTwoFactor)
         {
-            RedirectManager.RedirectTo(
-                "Account/LoginWith2fa",
-                new() { ["returnUrl"] = ReturnUrl, ["rememberMe"] = Input.RememberMe });
+            // Check CPR number before proceeding to two-factor authentication
+            var cprRecord = await TodoDb.CprRecords.FirstOrDefaultAsync(c => c.UserId == user.Id);
+            if (cprRecord != null && cprRecord.CprNumber == Input.CprNumber)
+            {
+                RedirectManager.RedirectTo(
+                    "Account/LoginWith2fa",
+                    new() { ["returnUrl"] = ReturnUrl, ["rememberMe"] = Input.RememberMe });
+            }
+            else
+            {
+                errorMessage = "Invalid CPR number.";
+            }
         }
         else if (result.IsLockedOut)
         {
@@ -108,7 +148,7 @@
         }
         else
         {
-            errorMessage = "Error: Invalid login attempt.";
+            errorMessage = "Invalid email or password.";
         }
     }
 
@@ -121,6 +161,10 @@
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; } = "";
+
+        [Required]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "CPR number must be exactly 10 digits")]
+        public string CprNumber { get; set; } = "";
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }

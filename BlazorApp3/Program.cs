@@ -27,17 +27,25 @@ builder.Services.AddAuthentication(options =>
 })
     .AddIdentityCookies();
 
+// Add ApplicationDbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") ??
+    throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
+
+// Add TodoDbContext
+builder.Services.AddDbContext<TodoDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("TodoDb") ??
+    throw new InvalidOperationException("Connection string 'TodoDb' not found.")));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// Configure Identity with role support
+// Add this after the existing .AddDefaultTokenProviders() line
 builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager()
-    .AddDefaultTokenProviders();
+    .AddDefaultTokenProviders()
+    .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>("CprVerification");
 
 // Password settings
 builder.Services.Configure<IdentityOptions>(options =>
@@ -67,36 +75,52 @@ var app = builder.Build();
 // Create database and initialize admin role/user
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    var services = scope.ServiceProvider;
 
-    db.Database.Migrate();
-
-    // Set up roles and admin user
-    var serviceProvider = scope.ServiceProvider;
-    var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
-    // Create Admin role if it doesn't exist
-    if (!await roleManager.RoleExistsAsync("Admin"))
+    try
     {
-        await roleManager.CreateAsync(new IdentityRole("Admin"));
-    }
+        // Initialize ApplicationDbContext
+        var db = services.GetRequiredService<ApplicationDbContext>();
+        db.Database.EnsureCreated();
 
-    // Create admin user if it doesn't exist
-    var adminEmail = "admin@example.com";
-    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+        // Initialize TodoDbContext - THIS WAS MISSING
+        var todoDb = services.GetRequiredService<TodoDbContext>();
+        todoDb.Database.EnsureCreated();
 
-    if (adminUser == null)
-    {
-        adminUser = new ApplicationUser
+        // Diagnostic check for TodoDb
+        Console.WriteLine($"TodoDb connection can connect: {todoDb.Database.CanConnect()}");
+        Console.WriteLine($"CPR Records table exists: {todoDb.CprRecords != null}");
+
+        // Set up roles and admin user
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+        // Create Admin role if it doesn't exist
+        if (!await roleManager.RoleExistsAsync("Admin"))
         {
-            UserName = adminEmail,
-            Email = adminEmail,
-            EmailConfirmed = true  // Skip email confirmation for admin
-        };
+            await roleManager.CreateAsync(new IdentityRole("Admin"));
+        }
 
-        await userManager.CreateAsync(adminUser, "Admin@123!");
-        await userManager.AddToRoleAsync(adminUser, "Admin");
+        // Create admin user if it doesn't exist
+        var adminEmail = "admin@example.com";
+        var adminUser = await userManager.FindByEmailAsync(adminEmail);
+
+        if (adminUser == null)
+        {
+            adminUser = new ApplicationUser
+            {
+                UserName = adminEmail,
+                Email = adminEmail,
+                EmailConfirmed = true  // Skip email confirmation for admin
+            };
+
+            await userManager.CreateAsync(adminUser, "Admin@123!");
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Database initialization error: {ex.Message}");
     }
 }
 

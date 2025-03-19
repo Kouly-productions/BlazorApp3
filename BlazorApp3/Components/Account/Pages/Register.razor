@@ -14,6 +14,7 @@
 @inject ILogger<Register> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
+@inject RoleManager<IdentityRole> RoleManager
 
 <PageTitle>Register</PageTitle>
 
@@ -91,6 +92,20 @@
         }
 
         Logger.LogInformation("User created a new account with password.");
+
+        // Add the user to the selected role - THIS WAS MISSING
+        if (!string.IsNullOrEmpty(Input.Role))
+        {
+            // Ensure the role exists
+            if (!await RoleManager.RoleExistsAsync(Input.Role))
+            {
+                await RoleManager.CreateAsync(new IdentityRole(Input.Role));
+            }
+
+            // Add the user to the role
+            await UserManager.AddToRoleAsync(user, Input.Role);
+            Logger.LogInformation("User added to role: {Role}", Input.Role);
+        }
 
         var userId = await UserManager.GetUserIdAsync(user);
         var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
