@@ -119,7 +119,7 @@
                 // All credentials match, sign in the user
                 await SignInManager.SignInAsync(user, Input.RememberMe);
                 Logger.LogInformation("User logged in.");
-                RedirectManager.RedirectTo(ReturnUrl);
+                RedirectManager.RedirectTo(ReturnUrl ?? "/Todo");
             }
             else
             {

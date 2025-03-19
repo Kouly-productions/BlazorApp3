@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using BlazorApp3.Components;
 using BlazorApp3.Components.Account;
 using BlazorApp3.Data;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +47,25 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
     .AddSignInManager()
     .AddDefaultTokenProviders()
     .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>("CprVerification");
+
+builder.Services.Configure<Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionOptions>(options =>
+{
+    options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+    options.HttpsPort = 443; // Standard HTTPS port
+});
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.Configure<Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionOptions>(options =>
+    {
+        options.HttpsPort = 5001; // Default development HTTPS port
+    });
+}
+
+builder.Services.AddMvc(options =>
+{
+    options.Filters.Add(new RequireHttpsAttribute());
+});
 
 // Password settings
 builder.Services.Configure<IdentityOptions>(options =>
@@ -135,7 +155,9 @@ else
     app.UseHsts();
 }
 
+// This is the correct place for HTTPS redirection - AFTER configuring the error handlers
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 app.UseAntiforgery();
 

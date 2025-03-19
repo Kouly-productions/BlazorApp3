@@ -1,0 +1,237 @@
+﻿@page "/Todo"
+@attribute [Authorize]
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using BlazorApp3.Data
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>My Todo List</PageTitle>
+
+<div class="container mt-4">
+    <h1>My Todo List</h1>
+
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Add New Task</h3>
+                </div>
+                <div class="card-body">
+                    <EditForm Model="@todoForm" OnValidSubmit="AddTodo">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary class="text-danger" />
+
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Task Title</label>
+                            <InputText @bind-Value="todoForm.Title" id="title" class="form-control" placeholder="Enter task title" />
+                            <ValidationMessage For="@(() => todoForm.Title)" class="text-danger" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description (Optional)</label>
+                            <InputTextArea @bind-Value="todoForm.Description" id="description" class="form-control" rows="3" placeholder="Enter task description" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Add Task</button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            @if (!string.IsNullOrEmpty(StatusMessage))
+            {
+                    <div class="alert @StatusClass" role="alert">
+                    @StatusMessage
+                    </div>
+            }
+
+            @if (todoItems == null)
+            {
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+            }
+            else if (!todoItems.Any())
+            {
+                    <div class="alert alert-info">
+                        You don't have any tasks yet. Add your first task above!
+                    </div>
+            }
+            else
+            {
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Created Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var item in todoItems)
+                            {
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" checked="@item.IsCompleted" 
+                                                           @onchange="e => ToggleTaskStatus(item, (bool)e.Value)" />
+                                                </div>
+                                            </td>
+                                            <td class="@(item.IsCompleted ? "text-decoration-line-through" : "")">@item.Title</td>
+                                            <td class="@(item.IsCompleted ? "text-decoration-line-through" : "")">@item.Description</td>
+                                            <td>@item.CreatedDate.ToString("yyyy-MM-dd")</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-danger" @onclick="() => DeleteTask(item)">
+                                                    <i class="bi bi-trash"></i> Delete
+                                                </button>
+                                            </td>
+                                        </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<TodoItem> todoItems;
+    private TodoItemViewModel todoForm = new TodoItemViewModel();
+    private string StatusMessage = "";
+    private string StatusClass = "alert-info";
+
+    [Inject] private TodoDbContext TodoDb { get; set; }
+    [Inject] private AuthenticationStateProvider AuthStateProvider { get; set; }
+    [Inject] private NavigationManager NavigationManager { get; set; }
+    [Inject] private ILogger<Todo> Logger { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTasks();
+    }
+
+    private async Task LoadTasks()
+    {
+        try
+        {
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity?.IsAuthenticated == true)
+            {
+                string userId = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+                todoItems = await TodoDb.TodoItems
+                    .Where(t => t.UserId == userId)
+                    .OrderByDescending(t => t.CreatedDate)
+                    .ToListAsync();
+            }
+            else
+            {
+                // Shouldn't happen due to [Authorize] attribute but handle just in case
+                NavigationManager.NavigateTo("/Account/Login");
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error loading todo items: {Message}", ex.Message);
+            StatusMessage = "Error loading tasks. Please try again.";
+            StatusClass = "alert-danger";
+        }
+    }
+
+    private async Task AddTodo()
+    {
+        try
+        {
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+            string userId = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                StatusMessage = "User ID not found. Please try logging in again.";
+                StatusClass = "alert-danger";
+                return;
+            }
+
+            // Create a new todo item from the form model
+            var todoItem = new TodoItem
+                {
+                    UserId = userId,
+                    Title = todoForm.Title,
+                    Description = todoForm.Description ?? "",
+                    IsCompleted = false,
+                    CreatedDate = DateTime.Now
+                };
+
+            // Add to database
+            await TodoDb.TodoItems.AddAsync(todoItem);
+            await TodoDb.SaveChangesAsync();
+
+            // Reset form
+            todoForm = new TodoItemViewModel();
+
+            // Show success message
+            StatusMessage = "Task added successfully!";
+            StatusClass = "alert-success";
+
+            // Reload tasks
+            await LoadTasks();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error adding todo item: {Message}", ex.Message);
+            StatusMessage = "Error adding task. Please try again.";
+            StatusClass = "alert-danger";
+        }
+    }
+
+    private async Task ToggleTaskStatus(TodoItem item, bool isCompleted)
+    {
+        try
+        {
+            item.IsCompleted = isCompleted;
+            TodoDb.TodoItems.Update(item);
+            await TodoDb.SaveChangesAsync();
+
+            // Reload tasks to ensure order is preserved
+            await LoadTasks();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error updating todo item status: {Message}", ex.Message);
+            StatusMessage = "Error updating task status. Please try again.";
+            StatusClass = "alert-danger";
+        }
+    }
+
+    private async Task DeleteTask(TodoItem item)
+    {
+        try
+        {
+            TodoDb.TodoItems.Remove(item);
+            await TodoDb.SaveChangesAsync();
+
+            StatusMessage = "Task deleted successfully!";
+            StatusClass = "alert-success";
+
+            // Reload tasks
+            await LoadTasks();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error deleting todo item: {Message}", ex.Message);
+            StatusMessage = "Error deleting task. Please try again.";
+            StatusClass = "alert-danger";
+        }
+    }
+}
