@@ -12,6 +12,7 @@
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 @inject TodoDbContext TodoDb
+@inject BlazorApp3.Services.IHashingService HashingService
 
 <PageTitle>Log in</PageTitle>
 
@@ -114,7 +115,7 @@
         {
             // Check the CPR number
             var cprRecord = await TodoDb.CprRecords.FirstOrDefaultAsync(c => c.UserId == user.Id);
-            if (cprRecord != null && cprRecord.CprNumber == Input.CprNumber)
+            if (cprRecord != null && HashingService.VerifyHash(Input.CprNumber, cprRecord.CprNumber, "PBKDF2"))
             {
                 // All credentials match, sign in the user
                 await SignInManager.SignInAsync(user, Input.RememberMe);
@@ -123,14 +124,14 @@
             }
             else
             {
-                errorMessage = "Invalid CPR number.";
+                errorMessage = "Invalid login attempt.";
             }
         }
         else if (result.RequiresTwoFactor)
         {
             // Check CPR number before proceeding to two-factor authentication
             var cprRecord = await TodoDb.CprRecords.FirstOrDefaultAsync(c => c.UserId == user.Id);
-            if (cprRecord != null && cprRecord.CprNumber == Input.CprNumber)
+            if (cprRecord != null && HashingService.VerifyHash(Input.CprNumber, cprRecord.CprNumber, "PBKDF2"))
             {
                 RedirectManager.RedirectTo(
                     "Account/LoginWith2fa",
@@ -138,7 +139,7 @@
             }
             else
             {
-                errorMessage = "Invalid CPR number.";
+                errorMessage = "Invalid login attempt.";
             }
         }
         else if (result.IsLockedOut)
@@ -148,7 +149,7 @@
         }
         else
         {
-            errorMessage = "Invalid email or password.";
+            errorMessage = "Invalid login attempt.";
         }
     }
 

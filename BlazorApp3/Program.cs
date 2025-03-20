@@ -104,6 +104,8 @@ builder.Services.Configure<IdentityOptions>(options =>
 // Required for email confirmation - using a no-op implementation for development
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
+builder.Services.AddSingleton<BlazorApp3.Services.IHashingService, BlazorApp3.Services.HashingService>();
+
 builder.WebHost.UseIIS();
 
 var app = builder.Build();

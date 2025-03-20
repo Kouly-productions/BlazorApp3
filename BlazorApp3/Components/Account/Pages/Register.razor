@@ -16,6 +16,7 @@
 @inject IdentityRedirectManager RedirectManager
 @inject RoleManager<IdentityRole> RoleManager
 @inject TodoDbContext TodoDb
+@inject BlazorApp3.Services.IHashingService HashingService
 
 <PageTitle>Register</PageTitle>
 
@@ -126,7 +127,7 @@
         var cprRecord = new CprRecord
             {
                 UserId = userId,
-                CprNumber = Input.CprNumber,
+                CprNumber = HashingService.PBKDF2(Input.CprNumber),
                 CreatedDate = DateTime.Now
             };
 
