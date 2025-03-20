@@ -3,12 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\components\\account\\pages\\register.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|solutionrelative:blazorapp3\\components\\account\\pages\\register.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|solutionrelative:blazorapp3\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|solutionrelative:blazorapp3\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\migrations\\applicationdbcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|solutionrelative:blazorapp3\\migrations\\applicationdbcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\data\\tododbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|solutionrelative:blazorapp3\\data\\tododbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|solutionrelative:blazorapp3\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\data\\todomodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -19,20 +27,36 @@
       "RelativeMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|solutionrelative:blazorapp3\\data\\todoitemviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\data\\tododbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|solutionrelative:blazorapp3\\data\\tododbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\data\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|solutionrelative:blazorapp3\\data\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\components\\account\\pages\\cprnr.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|solutionrelative:blazorapp3\\components\\account\\pages\\cprnr.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|solutionrelative:blazorapp3\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\blazorapp3.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|solutionrelative:blazorapp3\\blazorapp3.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\web.config||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|solutionrelative:blazorapp3\\web.config||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\properties\\servicedependencies.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|solutionrelative:blazorapp3\\properties\\servicedependencies.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|solutionrelative:blazorapp3\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|solutionrelative:blazorapp3\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\components\\account\\pages\\register.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|solutionrelative:blazorapp3\\components\\account\\pages\\register.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\components\\account\\pages\\cprnr.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|solutionrelative:blazorapp3\\components\\account\\pages\\cprnr.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\components\\pages\\todo.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -53,14 +77,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\components\\account\\pages\\forgotpassword.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|solutionrelative:blazorapp3\\components\\account\\pages\\forgotpassword.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\data\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|solutionrelative:blazorapp3\\data\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|solutionrelative:blazorapp3\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7E990C3E-A73A-414D-BBB2-0BC390DDA926}|BlazorApp3\\BlazorApp3.csproj|c:\\users\\muchi\\desktop\\schoolprogramming\\blazorapp3\\blazorapp3\\components\\account\\pages\\loginwith2fa.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -162,62 +178,72 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
+              "Title": "ApplicationDbContextModelSnapshot.cs",
+              "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Migrations\\ApplicationDbContextModelSnapshot.cs",
+              "RelativeDocumentMoniker": "BlazorApp3\\Migrations\\ApplicationDbContextModelSnapshot.cs",
+              "ToolTip": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Migrations\\ApplicationDbContextModelSnapshot.cs",
+              "RelativeToolTip": "BlazorApp3\\Migrations\\ApplicationDbContextModelSnapshot.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-19T20:07:23.972Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "TodoModels.cs",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Data\\TodoModels.cs",
               "RelativeDocumentMoniker": "BlazorApp3\\Data\\TodoModels.cs",
               "ToolTip": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Data\\TodoModels.cs",
               "RelativeToolTip": "BlazorApp3\\Data\\TodoModels.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACMAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-18T09:06:58.892Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-18T09:06:58.892Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 12,
               "Title": "Register.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Account\\Pages\\Register.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Account\\Pages\\Register.razor",
               "ToolTip": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Account\\Pages\\Register.razor",
               "RelativeToolTip": "BlazorApp3\\Components\\Account\\Pages\\Register.razor",
-              "ViewState": "AgIAACAAAAAAAAAAAAApwDQAAAA3AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-01T09:05:43.869Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-01T09:05:43.869Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 0,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\appsettings.json",
               "RelativeDocumentMoniker": "BlazorApp3\\appsettings.json",
               "ToolTip": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\appsettings.json",
               "RelativeToolTip": "BlazorApp3\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-02-26T19:58:53.446Z"
+              "WhenOpened": "2025-02-26T19:58:53.446Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 7,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Program.cs",
               "RelativeDocumentMoniker": "BlazorApp3\\Program.cs",
               "ToolTip": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Program.cs",
               "RelativeToolTip": "BlazorApp3\\Program.cs",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAAAJ4AAAAaAAAAAAAAAA==",
+              "ViewState": "AgIAAJEAAAAAAAAAAAAiwJcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-26T19:33:30.127Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-26T19:33:30.127Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 11,
               "Title": "launchSettings.json",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Properties\\launchSettings.json",
               "RelativeDocumentMoniker": "BlazorApp3\\Properties\\launchSettings.json",
@@ -229,7 +255,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 15,
               "Title": "Login.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Account\\Pages\\Login.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Account\\Pages\\Login.razor",
@@ -241,7 +267,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 13,
               "Title": "CprNr.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Account\\Pages\\CprNr.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Account\\Pages\\CprNr.razor",
@@ -253,20 +279,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "TodoDbContext.cs",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Data\\TodoDbContext.cs",
               "RelativeDocumentMoniker": "BlazorApp3\\Data\\TodoDbContext.cs",
               "ToolTip": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Data\\TodoDbContext.cs",
               "RelativeToolTip": "BlazorApp3\\Data\\TodoDbContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-18T09:10:01.985Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-18T09:10:01.985Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "TodoItemViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Data\\TodoItemViewModel.cs",
               "RelativeDocumentMoniker": "BlazorApp3\\Data\\TodoItemViewModel.cs",
@@ -274,84 +299,23 @@
               "RelativeToolTip": "BlazorApp3\\Data\\TodoItemViewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-19T09:53:02.621Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-19T09:53:02.621Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 18,
               "Title": "ForgotPassword.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Account\\Pages\\ForgotPassword.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Account\\Pages\\ForgotPassword.razor",
               "ToolTip": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Account\\Pages\\ForgotPassword.razor",
               "RelativeToolTip": "BlazorApp3\\Components\\Account\\Pages\\ForgotPassword.razor",
-              "ViewState": "AgIAACEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACAAAAAAAAAAAAAxwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-03-18T08:51:41.777Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Todo.razor",
-              "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Pages\\Todo.razor",
-              "RelativeDocumentMoniker": "BlazorApp3\\Components\\Pages\\Todo.razor",
-              "ToolTip": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Pages\\Todo.razor",
-              "RelativeToolTip": "BlazorApp3\\Components\\Pages\\Todo.razor",
-              "ViewState": "AgIAAMQAAAAAAAAAAAAiwNEAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-19T09:30:01.759Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "NavMenu.razor",
-              "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Layout\\NavMenu.razor",
-              "RelativeDocumentMoniker": "BlazorApp3\\Components\\Layout\\NavMenu.razor",
-              "ToolTip": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Layout\\NavMenu.razor",
-              "RelativeToolTip": "BlazorApp3\\Components\\Layout\\NavMenu.razor",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAcwBgAAAA4AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-02-26T19:46:38.418Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "VerifyCpr.razor",
-              "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Pages\\VerifyCpr.razor",
-              "RelativeDocumentMoniker": "BlazorApp3\\Components\\Pages\\VerifyCpr.razor",
-              "ToolTip": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Pages\\VerifyCpr.razor",
-              "RelativeToolTip": "BlazorApp3\\Components\\Pages\\VerifyCpr.razor",
-              "ViewState": "AgIAAKEAAAAAAAAAAAAiwK4AAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-19T08:56:35.112Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "LoginWithRecoveryCode.razor",
-              "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Account\\Pages\\LoginWithRecoveryCode.razor",
-              "RelativeDocumentMoniker": "BlazorApp3\\Components\\Account\\Pages\\LoginWithRecoveryCode.razor",
-              "ToolTip": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Account\\Pages\\LoginWithRecoveryCode.razor",
-              "RelativeToolTip": "BlazorApp3\\Components\\Account\\Pages\\LoginWithRecoveryCode.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-18T08:51:45.177Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "ApplicationUser.cs",
-              "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Data\\ApplicationUser.cs",
-              "RelativeDocumentMoniker": "BlazorApp3\\Data\\ApplicationUser.cs",
-              "ToolTip": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Data\\ApplicationUser.cs",
-              "RelativeToolTip": "BlazorApp3\\Data\\ApplicationUser.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-26T19:58:53.046Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 3,
               "Title": "ApplicationDbContext.cs",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Data\\ApplicationDbContext.cs",
               "RelativeDocumentMoniker": "BlazorApp3\\Data\\ApplicationDbContext.cs",
@@ -363,7 +327,103 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ApplicationUser.cs",
+              "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Data\\ApplicationUser.cs",
+              "RelativeDocumentMoniker": "BlazorApp3\\Data\\ApplicationUser.cs",
+              "ToolTip": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Data\\ApplicationUser.cs",
+              "RelativeToolTip": "BlazorApp3\\Data\\ApplicationUser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-26T19:58:53.046Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "serviceDependencies.json",
+              "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Properties\\serviceDependencies.json",
+              "RelativeDocumentMoniker": "BlazorApp3\\Properties\\serviceDependencies.json",
+              "ToolTip": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Properties\\serviceDependencies.json",
+              "RelativeToolTip": "BlazorApp3\\Properties\\serviceDependencies.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-03-19T15:14:37.772Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "BlazorApp3.csproj",
+              "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\BlazorApp3.csproj",
+              "RelativeDocumentMoniker": "BlazorApp3\\BlazorApp3.csproj",
+              "ToolTip": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\BlazorApp3.csproj",
+              "RelativeToolTip": "BlazorApp3\\BlazorApp3.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-03-19T15:14:41.645Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "web.config",
+              "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\web.config",
+              "RelativeDocumentMoniker": "BlazorApp3\\web.config",
+              "ToolTip": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\web.config",
+              "RelativeToolTip": "BlazorApp3\\web.config",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2025-03-19T15:15:36.489Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Todo.razor",
+              "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Pages\\Todo.razor",
+              "RelativeDocumentMoniker": "BlazorApp3\\Components\\Pages\\Todo.razor",
+              "ToolTip": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Pages\\Todo.razor",
+              "RelativeToolTip": "BlazorApp3\\Components\\Pages\\Todo.razor",
+              "ViewState": "AgIAAMQAAAAAAAAAAAAiwNEAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-19T09:30:01.759Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "NavMenu.razor",
+              "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Layout\\NavMenu.razor",
+              "RelativeDocumentMoniker": "BlazorApp3\\Components\\Layout\\NavMenu.razor",
+              "ToolTip": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Layout\\NavMenu.razor",
+              "RelativeToolTip": "BlazorApp3\\Components\\Layout\\NavMenu.razor",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAcwBgAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-26T19:46:38.418Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 17,
+              "Title": "VerifyCpr.razor",
+              "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Pages\\VerifyCpr.razor",
+              "RelativeDocumentMoniker": "BlazorApp3\\Components\\Pages\\VerifyCpr.razor",
+              "ToolTip": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Pages\\VerifyCpr.razor",
+              "RelativeToolTip": "BlazorApp3\\Components\\Pages\\VerifyCpr.razor",
+              "ViewState": "AgIAAKEAAAAAAAAAAAAiwK4AAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-19T08:56:35.112Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "LoginWithRecoveryCode.razor",
+              "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Account\\Pages\\LoginWithRecoveryCode.razor",
+              "RelativeDocumentMoniker": "BlazorApp3\\Components\\Account\\Pages\\LoginWithRecoveryCode.razor",
+              "ToolTip": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Account\\Pages\\LoginWithRecoveryCode.razor",
+              "RelativeToolTip": "BlazorApp3\\Components\\Account\\Pages\\LoginWithRecoveryCode.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-18T08:51:45.177Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
               "Title": "IdentityRedirectManager.cs",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Account\\IdentityRedirectManager.cs",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Account\\IdentityRedirectManager.cs",
@@ -375,7 +435,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 20,
               "Title": "RedirectToLogin.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Account\\Shared\\RedirectToLogin.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Account\\Shared\\RedirectToLogin.razor",
@@ -387,7 +447,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 19,
               "Title": "LoginWith2fa.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Account\\Pages\\LoginWith2fa.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Account\\Pages\\LoginWith2fa.razor",
@@ -399,7 +459,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 24,
               "Title": "InvalidPasswordReset.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Account\\Pages\\InvalidPasswordReset.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Account\\Pages\\InvalidPasswordReset.razor",
@@ -411,7 +471,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 25,
               "Title": "Lockout.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Account\\Pages\\Lockout.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Account\\Pages\\Lockout.razor",
@@ -423,7 +483,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 23,
               "Title": "InvalidUser.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Account\\Pages\\InvalidUser.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Account\\Pages\\InvalidUser.razor",
@@ -435,7 +495,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 27,
               "Title": "MainLayout.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Layout\\MainLayout.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Layout\\MainLayout.razor",
@@ -447,7 +507,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 26,
               "Title": "Admin.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Pages\\Admin.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Pages\\Admin.razor",
@@ -459,7 +519,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 32,
               "Title": "_Imports.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\_Imports.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\_Imports.razor",
@@ -471,7 +531,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 31,
               "Title": "_Imports.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Account\\Pages\\_Imports.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Account\\Pages\\_Imports.razor",
@@ -483,7 +543,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 28,
               "Title": "CheckConnection.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Pages\\CheckConnection.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Pages\\CheckConnection.razor",
@@ -495,7 +555,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 29,
               "Title": "Counter.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Pages\\Counter.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Pages\\Counter.razor",
@@ -507,7 +567,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 30,
               "Title": "_Imports.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Account\\Pages\\Manage\\_Imports.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Account\\Pages\\Manage\\_Imports.razor",
@@ -519,7 +579,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 33,
               "Title": "Routes.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Routes.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Routes.razor",
@@ -531,7 +591,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 34,
               "Title": "App.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\App.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\App.razor",
@@ -543,7 +603,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 38,
               "Title": "Error.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Pages\\Error.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Pages\\Error.razor",
@@ -555,7 +615,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 39,
               "Title": "Weather.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Pages\\Weather.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Pages\\Weather.razor",
@@ -567,7 +627,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 40,
               "Title": "Home.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Pages\\Home.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Pages\\Home.razor",
@@ -579,7 +639,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 37,
               "Title": "Auth.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Pages\\Auth.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Pages\\Auth.razor",
@@ -591,7 +651,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 35,
               "Title": "EnableAuthenticator.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Account\\Pages\\Manage\\EnableAuthenticator.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Account\\Pages\\Manage\\EnableAuthenticator.razor",
@@ -603,19 +663,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 36,
               "Title": "TwoFactorAuthentication.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Account\\Pages\\Manage\\TwoFactorAuthentication.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Account\\Pages\\Manage\\TwoFactorAuthentication.razor",
               "ToolTip": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Account\\Pages\\Manage\\TwoFactorAuthentication.razor",
               "RelativeToolTip": "BlazorApp3\\Components\\Account\\Pages\\Manage\\TwoFactorAuthentication.razor",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAxwBoAAAAoAAAAAAAAAA==",
+              "ViewState": "AgIAAAIAAAAAAAAAAABBwBoAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-03-01T09:04:00.442Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 37,
+              "DocumentIndex": 41,
               "Title": "AdminPage.razor",
               "DocumentMoniker": "C:\\Users\\Muchi\\Desktop\\SchoolProgramming\\BlazorApp3\\BlazorApp3\\Components\\Account\\Pages\\AdminPage.razor",
               "RelativeDocumentMoniker": "BlazorApp3\\Components\\Account\\Pages\\AdminPage.razor",

@@ -9,6 +9,20 @@ using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    // Configure HTTPS with the development certificate
+    serverOptions.ListenAnyIP(5000); // HTTP port
+    serverOptions.ListenAnyIP(5001, listenOptions =>
+    {
+        // Explicitly use the certificate from the file
+        var cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(
+            Path.Combine(builder.Environment.ContentRootPath, "certs", "aspnetapp.pfx"),
+            "YourSecurePassword");
+        listenOptions.UseHttps(cert);
+    });
+});
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
@@ -89,6 +103,8 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 // Required for email confirmation - using a no-op implementation for development
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+
+builder.WebHost.UseIIS();
 
 var app = builder.Build();
 

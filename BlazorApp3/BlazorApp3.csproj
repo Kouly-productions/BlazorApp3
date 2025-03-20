@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-BlazorApp3-0282fedb-d2c4-4899-bb8d-4d00972d37b8</UserSecretsId>
+	<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+	<IsTransformWebConfigDisabled>false</IsTransformWebConfigDisabled>
   </PropertyGroup>
 
   <ItemGroup>
