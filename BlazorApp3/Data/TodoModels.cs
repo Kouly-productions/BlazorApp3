@@ -32,5 +32,8 @@ namespace BlazorApp3.Data
         public bool IsCompleted { get; set; }
 
         public DateTime CreatedDate { get; set; } = DateTime.Now;
+
+        // Flag to indicate if the content is encrypted
+        public bool IsEncrypted { get; set; } = false;
     }
 }

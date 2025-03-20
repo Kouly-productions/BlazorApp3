@@ -192,6 +192,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBZG1pbi5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Muchi/Desktop/SchoolProgramming/BlazorApp3/BlazorApp3/Components/Pages/AsymmetricEncryptionDemo.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBc3ltbWV0cmljRW5jcnlwdGlvbkRlbW8ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Muchi/Desktop/SchoolProgramming/BlazorApp3/BlazorApp3/Components/Pages/Auth.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBdXRoLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
@@ -202,6 +206,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Muchi/Desktop/SchoolProgramming/BlazorApp3/BlazorApp3/Components/Pages/Counter.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDb3VudGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Muchi/Desktop/SchoolProgramming/BlazorApp3/BlazorApp3/Components/Pages/EncryptionDemo.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFbmNyeXB0aW9uRGVtby5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Muchi/Desktop/SchoolProgramming/BlazorApp3/BlazorApp3/Components/Pages/Error.razor]

@@ -247,4 +247,7 @@ C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\
 C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\System.Text.Json.dll
 C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\web.config
 C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\BCrypt.Net-Next.dll
-C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
+C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\Newtonsoft.Json.dll
+C:\Users\Muchi\Desktop\SchoolProgramming\BlazorApp3\BlazorApp3\bin\Debug\net9.0\Newtonsoft.Json.Bson.dll

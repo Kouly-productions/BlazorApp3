@@ -1,0 +1,107 @@
+﻿@page "/asymmetric-demo"
+@rendermode InteractiveServer
+@using BlazorApp3.Services
+
+@inject IAsymmetricEncryptionService AsymmetricEncryptionService
+@inject IApiClientService ApiClientService
+
+<PageTitle>Asymmetric Encryption Demo</PageTitle>
+
+<h1>Asymmetric Encryption Demo</h1>
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Encryption Keys</h3>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Public Key:</label>
+                        <textarea readonly class="form-control" rows="3">@AsymmetricEncryptionService.PublicKey</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Private Key (would be kept secret in production):</label>
+                        <textarea readonly class="form-control" rows="3">@AsymmetricEncryptionService.PrivateKey</textarea>
+                    </div>
+
+                    <button class="btn btn-warning" @onclick="GenerateNewKeys">Generate New Keys</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">Test Encryption via API</h3>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="plaintext" class="form-label">Text to Encrypt:</label>
+                        <textarea @bind="PlainText" id="plaintext" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="ciphertext" class="form-label">Encrypted Text (from API):</label>
+                        <textarea @bind="CipherText" id="ciphertext" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="decrypted" class="form-label">Decrypted Text:</label>
+                        <textarea @bind="DecryptedText" id="decrypted" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <button class="btn btn-primary me-2" @onclick="EncryptViaApi">Encrypt via API</button>
+                    <button class="btn btn-secondary" @onclick="DecryptLocally">Decrypt Locally</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="alert alert-info">
+                <h4>How it works:</h4>
+                <ol>
+                    <li>The public key is sent to the API</li>
+                    <li>The API uses the public key to encrypt your text</li>
+                    <li>The encrypted text is returned to this application</li>
+                    <li>This application uses its private key to decrypt the text</li>
+                </ol>
+                <p><strong>Note:</strong> In a real-world scenario, the private key never leaves the server.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string PlainText { get; set; } = "This text will be encrypted by the API using our public key.";
+    private string CipherText { get; set; } = "";
+    private string DecryptedText { get; set; } = "";
+
+    private async Task EncryptViaApi()
+    {
+        if (string.IsNullOrEmpty(PlainText))
+            return;
+
+        CipherText = await ApiClientService.EncryptWithApiAsync(PlainText);
+    }
+
+    private void DecryptLocally()
+    {
+        if (string.IsNullOrEmpty(CipherText))
+            return;
+
+        DecryptedText = AsymmetricEncryptionService.Decrypt(CipherText);
+    }
+
+    private void GenerateNewKeys()
+    {
+        AsymmetricEncryptionService.GenerateNewKeyPair();
+        AsymmetricEncryptionService.SaveKeys();
+    }
+}

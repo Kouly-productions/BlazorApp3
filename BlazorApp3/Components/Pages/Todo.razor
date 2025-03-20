@@ -103,12 +103,13 @@
 </div>
 
 @code {
+    @using BlazorApp3.Services
     private List<TodoItem> todoItems;
     private TodoItemViewModel todoForm = new TodoItemViewModel();
     private string StatusMessage = "";
     private string StatusClass = "alert-info";
 
-    [Inject] private TodoDbContext TodoDb { get; set; }
+    [Inject] private ITodoService TodoService { get; set; }
     [Inject] private AuthenticationStateProvider AuthStateProvider { get; set; }
     [Inject] private NavigationManager NavigationManager { get; set; }
     [Inject] private ILogger<Todo> Logger { get; set; }
@@ -128,11 +129,7 @@
             if (user.Identity?.IsAuthenticated == true)
             {
                 string userId = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-
-                todoItems = await TodoDb.TodoItems
-                    .Where(t => t.UserId == userId)
-                    .OrderByDescending(t => t.CreatedDate)
-                    .ToListAsync();
+                todoItems = await TodoService.GetUserTodoItemsAsync(userId);
             }
             else
             {
@@ -163,7 +160,7 @@
                 return;
             }
 
-            // Create a new todo item from the form model
+            // Create a new todo item
             var todoItem = new TodoItem
                 {
                     UserId = userId,
@@ -173,9 +170,8 @@
                     CreatedDate = DateTime.Now
                 };
 
-            // Add to database
-            await TodoDb.TodoItems.AddAsync(todoItem);
-            await TodoDb.SaveChangesAsync();
+            // Add to database with encryption
+            await TodoService.CreateTodoItemAsync(todoItem);
 
             // Reset form
             todoForm = new TodoItemViewModel();
@@ -200,10 +196,9 @@
         try
         {
             item.IsCompleted = isCompleted;
-            TodoDb.TodoItems.Update(item);
-            await TodoDb.SaveChangesAsync();
+            await TodoService.UpdateTodoItemAsync(item);
 
-            // Reload tasks to ensure order is preserved
+            // Reload tasks
             await LoadTasks();
         }
         catch (Exception ex)
@@ -218,8 +213,7 @@
     {
         try
         {
-            TodoDb.TodoItems.Remove(item);
-            await TodoDb.SaveChangesAsync();
+            await TodoService.DeleteTodoItemAsync(item.Id);
 
             StatusMessage = "Task deleted successfully!";
             StatusClass = "alert-success";

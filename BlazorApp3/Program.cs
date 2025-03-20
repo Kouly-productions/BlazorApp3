@@ -106,7 +106,23 @@ builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSe
 
 builder.Services.AddSingleton<BlazorApp3.Services.IHashingService, BlazorApp3.Services.HashingService>();
 
+builder.Services.AddSingleton<BlazorApp3.Services.IEncryptionService, BlazorApp3.Services.EncryptionService>();
+
+builder.Services.AddSingleton<BlazorApp3.Services.IAsymmetricEncryptionService, BlazorApp3.Services.AsymmetricEncryptionService>();
+
+builder.Services.AddControllers().AddNewtonsoftJson();
+
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<BlazorApp3.Services.IApiClientService, BlazorApp3.Services.ApiClientService>();
+
+builder.Services.AddScoped<BlazorApp3.Services.ITodoService, BlazorApp3.Services.TodoService>();
+
 builder.WebHost.UseIIS();
+
+if (!builder.Configuration.GetSection("ApiSettings").Exists())
+{
+    builder.Configuration["ApiSettings:BaseUrl"] = "https://localhost:7181"; // Default API URL
+}
 
 var app = builder.Build();
 
