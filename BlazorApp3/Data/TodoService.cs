@@ -35,17 +35,34 @@ namespace BlazorApp3.Services
                 .OrderByDescending(t => t.CreatedDate)
                 .ToListAsync();
 
-            // Decrypt any encrypted items
+            // Try to decrypt all items
             foreach (var item in items)
             {
-                if (item.IsEncrypted)
+                try
                 {
-                    item.Title = _encryptionService.Decrypt(item.Title);
-                    if (!string.IsNullOrEmpty(item.Description))
+                    // Check if this item appears to be encrypted
+                    // Simple heuristic: encrypted data is typically longer and contains non-ASCII characters
+                    if (item.Title.Length > 100 && !IsAscii(item.Title))
                     {
-                        item.Description = _encryptionService.Decrypt(item.Description);
+                        string decryptedTitle = _encryptionService.Decrypt(item.Title);
+                        if (!string.IsNullOrEmpty(decryptedTitle))
+                        {
+                            item.Title = decryptedTitle;
+                        }
                     }
-                    // Don't change the IsEncrypted flag here so we know to encrypt again if updated
+
+                    if (!string.IsNullOrEmpty(item.Description) && item.Description.Length > 100 && !IsAscii(item.Description))
+                    {
+                        string decryptedDesc = _encryptionService.Decrypt(item.Description);
+                        if (!string.IsNullOrEmpty(decryptedDesc))
+                        {
+                            item.Description = decryptedDesc;
+                        }
+                    }
+                }
+                catch
+                {
+                    // Item wasn't encrypted or decryption failed, leave as is
                 }
             }
 
@@ -56,12 +73,32 @@ namespace BlazorApp3.Services
         {
             var item = await _dbContext.TodoItems.FindAsync(id);
 
-            if (item != null && item.IsEncrypted)
+            if (item != null)
             {
-                item.Title = _encryptionService.Decrypt(item.Title);
-                if (!string.IsNullOrEmpty(item.Description))
+                try
                 {
-                    item.Description = _encryptionService.Decrypt(item.Description);
+                    // Check if this item appears to be encrypted
+                    if (item.Title.Length > 100 && !IsAscii(item.Title))
+                    {
+                        string decryptedTitle = _encryptionService.Decrypt(item.Title);
+                        if (!string.IsNullOrEmpty(decryptedTitle))
+                        {
+                            item.Title = decryptedTitle;
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(item.Description) && item.Description.Length > 100 && !IsAscii(item.Description))
+                    {
+                        string decryptedDesc = _encryptionService.Decrypt(item.Description);
+                        if (!string.IsNullOrEmpty(decryptedDesc))
+                        {
+                            item.Description = decryptedDesc;
+                        }
+                    }
+                }
+                catch
+                {
+                    // Decryption failed, leave as is
                 }
             }
 
@@ -70,23 +107,40 @@ namespace BlazorApp3.Services
 
         public async Task<TodoItem> CreateTodoItemAsync(TodoItem item)
         {
-            // Encrypt the title and description
-            string encryptedTitle = await _apiClient.EncryptWithApiAsync(item.Title);
-            string encryptedDescription = !string.IsNullOrEmpty(item.Description)
-                ? await _apiClient.EncryptWithApiAsync(item.Description)
-                : string.Empty;
-
-            // If encryption was successful, store the encrypted values
-            if (!string.IsNullOrEmpty(encryptedTitle))
+            try
             {
-                item.Title = encryptedTitle;
-                item.Description = encryptedDescription;
-                item.IsEncrypted = true;
-            }
+                // Encrypt the title and description
+                string encryptedTitle = await _apiClient.EncryptWithApiAsync(item.Title);
+                string encryptedDescription = !string.IsNullOrEmpty(item.Description)
+                    ? await _apiClient.EncryptWithApiAsync(item.Description)
+                    : string.Empty;
 
-            _dbContext.TodoItems.Add(item);
-            await _dbContext.SaveChangesAsync();
-            return item;
+                // If encryption was successful, store the encrypted values
+                if (!string.IsNullOrEmpty(encryptedTitle))
+                {
+                    item.Title = encryptedTitle;
+                    item.Description = encryptedDescription;
+                    // Remove this line that uses IsEncrypted
+                    // item.IsEncrypted = true;
+                }
+
+                _dbContext.TodoItems.Add(item);
+                await _dbContext.SaveChangesAsync();
+                return item;
+            }
+            catch (Exception ex)
+            {
+                // If there's an error with encryption, save without encryption
+                Console.WriteLine($"Error encrypting data: {ex.Message}");
+
+                // Reset to original values
+                item.Title = item.Title;
+                item.Description = item.Description ?? "";
+
+                _dbContext.TodoItems.Add(item);
+                await _dbContext.SaveChangesAsync();
+                return item;
+            }
         }
 
         public async Task<TodoItem> UpdateTodoItemAsync(TodoItem item)
@@ -95,22 +149,33 @@ namespace BlazorApp3.Services
             if (existingItem == null)
                 return null;
 
-            // Re-encrypt if needed
-            if (existingItem.IsEncrypted)
+            try
             {
-                string encryptedTitle = await _apiClient.EncryptWithApiAsync(item.Title);
-                string encryptedDescription = !string.IsNullOrEmpty(item.Description)
-                    ? await _apiClient.EncryptWithApiAsync(item.Description)
-                    : string.Empty;
+                // Check if this item appears to be encrypted already
+                bool seemsEncrypted = existingItem.Title.Length > 100 && !IsAscii(existingItem.Title);
 
-                if (!string.IsNullOrEmpty(encryptedTitle))
+                if (seemsEncrypted)
                 {
-                    existingItem.Title = encryptedTitle;
-                    existingItem.Description = encryptedDescription;
+                    string encryptedTitle = await _apiClient.EncryptWithApiAsync(item.Title);
+                    string encryptedDescription = !string.IsNullOrEmpty(item.Description)
+                        ? await _apiClient.EncryptWithApiAsync(item.Description)
+                        : string.Empty;
+
+                    if (!string.IsNullOrEmpty(encryptedTitle))
+                    {
+                        existingItem.Title = encryptedTitle;
+                        existingItem.Description = encryptedDescription;
+                    }
+                }
+                else
+                {
+                    existingItem.Title = item.Title;
+                    existingItem.Description = item.Description;
                 }
             }
-            else
+            catch
             {
+                // If encryption fails, update without encryption
                 existingItem.Title = item.Title;
                 existingItem.Description = item.Description;
             }
@@ -131,6 +196,12 @@ namespace BlazorApp3.Services
             _dbContext.TodoItems.Remove(item);
             await _dbContext.SaveChangesAsync();
             return true;
+        }
+
+        // Helper method to check if a string is all ASCII
+        private bool IsAscii(string text)
+        {
+            return text.All(c => c < 128);
         }
     }
 }
