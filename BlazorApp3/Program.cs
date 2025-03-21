@@ -6,6 +6,7 @@ using BlazorApp3.Components;
 using BlazorApp3.Components.Account;
 using BlazorApp3.Data;
 using Microsoft.AspNetCore.Mvc;
+using BlazorApp3.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -116,6 +117,8 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<BlazorApp3.Services.IApiClientService, BlazorApp3.Services.ApiClientService>();
 
 builder.Services.AddScoped<BlazorApp3.Services.ITodoService, BlazorApp3.Services.TodoService>();
+
+builder.Services.AddScoped<IAsymmetricEncryptionService, AsymmetricEncryptionService>();
 
 builder.WebHost.UseIIS();
 
