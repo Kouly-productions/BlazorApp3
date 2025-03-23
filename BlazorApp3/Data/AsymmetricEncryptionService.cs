@@ -8,24 +8,36 @@ namespace BlazorApp3.Services
     {
         string PrivateKey { get; }
         string PublicKey { get; }
+        string DbPrivateKey { get; }
+        string DbPublicKey { get; }
+
         string Decrypt(string encryptedData);
         void GenerateNewKeyPair();
         bool LoadKeys(string publicKey, string privateKey);
         void SaveKeys();
+
+        string DecryptDatabaseData(string encryptedData);
+        string DecryptDatabaseDataWithKey(string encryptedData, string privateKey);
+        string DecryptCSharp(string encryptedData, string privateKey);
     }
 
     public class AsymmetricEncryptionService : IAsymmetricEncryptionService
     {
         private RSA _rsaProvider;
+        private RSA _dbRsaProvider;
         private readonly IConfiguration _configuration;
 
         public string PrivateKey { get; private set; }
         public string PublicKey { get; private set; }
 
+        public string DbPrivateKey { get; private set; }
+        public string DbPublicKey { get; private set; }
+
         public AsymmetricEncryptionService(IConfiguration configuration)
         {
             _configuration = configuration;
             _rsaProvider = RSA.Create(2048);
+            _dbRsaProvider = RSA.Create(2048);
 
             // Try to load keys from configuration
             string storedPublicKey = _configuration["Encryption:RSA:PublicKey"];
@@ -33,42 +45,28 @@ namespace BlazorApp3.Services
 
             if (!string.IsNullOrEmpty(storedPublicKey) && !string.IsNullOrEmpty(storedPrivateKey))
             {
-                bool success = LoadKeys(storedPublicKey, storedPrivateKey);
-                if (!success)
-                {
-                    Console.WriteLine("Failed to load RSA keys from configuration. Generating new keys.");
-                    GenerateNewKeyPair();
-                    SaveKeys();
-                }
-                else
-                {
-                    Console.WriteLine("Successfully loaded RSA keys from configuration.");
-                }
+                LoadKeys(storedPublicKey, storedPrivateKey);
             }
             else
             {
-                Console.WriteLine("No RSA keys found in configuration. Generating new keys.");
                 GenerateNewKeyPair();
                 SaveKeys();
             }
 
-            // Verify the keys work correctly
-            try
+            // Load database keys
+            string storedDbPublicKey = _configuration["DatabaseEncryption:DbRSA:PublicDbKey"]!;
+            string storedDbPrivateKey = _configuration["DatabaseEncryption:DbRSA:PrivateDbKey"]!;
+
+            // Set the database keys to the properties
+            if (!string.IsNullOrEmpty(storedDbPublicKey) && !string.IsNullOrEmpty(storedDbPrivateKey))
             {
-                string testData = "Test encryption";
-                byte[] testBytes = Encoding.UTF8.GetBytes(testData);
-                byte[] encrypted = _rsaProvider.Encrypt(testBytes, RSAEncryptionPadding.OaepSHA256);
-                byte[] decrypted = _rsaProvider.Decrypt(encrypted, RSAEncryptionPadding.OaepSHA256);
-                string result = Encoding.UTF8.GetString(decrypted);
-                Console.WriteLine($"RSA key verification successful. Test: '{testData}' => '{result}'");
+                DbPublicKey = storedDbPublicKey;  // Set the public DB key
+                DbPrivateKey = storedDbPrivateKey; // Set the private DB key
+
+                // Initialize the database RSA provider
+                LoadDatabaseKeys(DbPublicKey, DbPrivateKey);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"RSA key verification failed: {ex.Message}");
-                Console.WriteLine("Generating new key pair due to verification failure");
-                GenerateNewKeyPair();
-                SaveKeys();
-            }
+
         }
 
         public void GenerateNewKeyPair()
@@ -76,7 +74,10 @@ namespace BlazorApp3.Services
             _rsaProvider = RSA.Create(2048);
             PublicKey = Convert.ToBase64String(_rsaProvider.ExportRSAPublicKey());
             PrivateKey = Convert.ToBase64String(_rsaProvider.ExportRSAPrivateKey());
-            Console.WriteLine("Generated new RSA key pair");
+            Console.WriteLine("New key pair generated.");
+
+            SaveKeys();  // Ensure keys are saved immediately
+
         }
 
         public bool LoadKeys(string publicKey, string privateKey)
@@ -89,84 +90,169 @@ namespace BlazorApp3.Services
 
                 PublicKey = publicKey;
                 PrivateKey = privateKey;
+
+                return true;
+            }
+            catch
+            {
+                GenerateNewKeyPair();
+                return false;
+            }
+
+
+
+        }
+
+        private bool LoadDatabaseKeys(string publicKey, string privateKey)
+        {
+            try
+            {
+                _dbRsaProvider = RSA.Create();
+                _dbRsaProvider.ImportRSAPrivateKey(Convert.FromBase64String(privateKey), out _);
+                _dbRsaProvider.ImportRSAPublicKey(Convert.FromBase64String(publicKey), out _);
+
+                Console.WriteLine($"Public Key: {DbPublicKey}");
+                Console.WriteLine($"Private Key: {DbPrivateKey}");
+
+                PublicKey = publicKey;
+                PrivateKey = privateKey;
+
                 return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading RSA keys: {ex.Message}");
-                GenerateNewKeyPair();
+                Console.WriteLine($"Failed to load database RSA keys: {ex.Message}");
                 return false;
             }
         }
 
         public void SaveKeys()
         {
-            try
+            // In a real application, you would use a more secure storage method
+            // like Azure Key Vault, but for this exercise we'll use appsettings.json
+            var configBuilder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+            var config = configBuilder.Build();
+
+            // Update the configuration
+            var settings = new Dictionary<string, string>
             {
-                // In a real application, you would use a more secure storage method
-                // like Azure Key Vault, but for this exercise we'll use appsettings.json
-                var configBuilder = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                {"Encryption:RSA:PublicKey", PublicKey},
+                {"Encryption:RSA:PrivateKey", PrivateKey}
+            };
 
-                var config = configBuilder.Build();
+            // Write to appsettings.json
+            // Note: In production, you should use a more secure method
+            var appSettingsPath = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");
+            string json = File.ReadAllText(appSettingsPath);
+            dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
 
-                // Update the configuration
-                var settings = new Dictionary<string, string>
-                {
-                    {"Encryption:RSA:PublicKey", PublicKey},
-                    {"Encryption:RSA:PrivateKey", PrivateKey}
-                };
-
-                // Write to appsettings.json
-                // Note: In production, you should use a more secure method
-                var appSettingsPath = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");
-                string json = File.ReadAllText(appSettingsPath);
-                dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
-
-                if (jsonObj["Encryption"] == null)
-                {
-                    jsonObj["Encryption"] = new Newtonsoft.Json.Linq.JObject();
-                }
-
-                if (jsonObj["Encryption"]["RSA"] == null)
-                {
-                    jsonObj["Encryption"]["RSA"] = new Newtonsoft.Json.Linq.JObject();
-                }
-
-                jsonObj["Encryption"]["RSA"]["PublicKey"] = PublicKey;
-                jsonObj["Encryption"]["RSA"]["PrivateKey"] = PrivateKey;
-
-                string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
-                File.WriteAllText(appSettingsPath, output);
-
-                Console.WriteLine("Saved RSA keys to configuration");
-            }
-            catch (Exception ex)
+            if (jsonObj["Encryption"] == null)
             {
-                Console.WriteLine($"Error saving RSA keys: {ex.Message}");
+                jsonObj["Encryption"] = new Newtonsoft.Json.Linq.JObject();
             }
+
+            if (jsonObj["Encryption"]["RSA"] == null)
+            {
+                jsonObj["Encryption"]["RSA"] = new Newtonsoft.Json.Linq.JObject();
+            }
+
+            jsonObj["Encryption"]["RSA"]["PublicKey"] = PublicKey;
+            jsonObj["Encryption"]["RSA"]["PrivateKey"] = PrivateKey;
+
+            string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
+            File.WriteAllText(appSettingsPath, output);
         }
 
         public string Decrypt(string encryptedData)
         {
             try
             {
-                Console.WriteLine($"Attempting to decrypt data starting with: {encryptedData.Substring(0, Math.Min(20, encryptedData.Length))}...");
-
                 byte[] dataBytes = Convert.FromBase64String(encryptedData);
                 byte[] decryptedBytes = _rsaProvider.Decrypt(dataBytes, RSAEncryptionPadding.OaepSHA256);
-                string result = Encoding.UTF8.GetString(decryptedBytes);
-
-                Console.WriteLine($"Decryption successful: {result.Substring(0, Math.Min(20, result.Length))}...");
-                return result;
+                Console.WriteLine($"Decrypt text from asymservice {decryptedBytes}");
+                return Encoding.UTF8.GetString(decryptedBytes);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Decryption error: {ex.Message}");
-                Console.WriteLine($"Encrypted data length: {encryptedData.Length}");
+                Console.WriteLine($"Decryption error asymservice: {ex.Message}");
                 return string.Empty;
             }
         }
+
+        public string DecryptDatabaseData(string encryptedData)
+        {
+            Console.WriteLine("Database Decrypt trycatch");
+            try
+            {
+                // Check if database RSA provider is initialized
+                if (_dbRsaProvider == null)
+                {
+                    Console.WriteLine("Database RSA provider not initialized.");
+                    return string.Empty;
+                }
+
+                byte[] dataBytes = Convert.FromBase64String(encryptedData);
+                byte[] decryptedBytes = _dbRsaProvider.Decrypt(dataBytes, RSAEncryptionPadding.OaepSHA256);
+                Console.WriteLine($"Database decrypt successful, length: {decryptedBytes.Length} bytes");
+                return Encoding.UTF8.GetString(decryptedBytes);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Database decryption error: {ex.Message}");
+                return string.Empty;
+            }
+        }
+
+        public string DecryptDatabaseDataWithKey(string encryptedData, string privateKeyBase64)
+        {
+            //RSA _dbRsaProvider = RSA.Create(2048);
+
+
+            Console.WriteLine("Database Decrypt trycatch");
+            try
+            {
+                // Import the private key
+                if (string.IsNullOrWhiteSpace(privateKeyBase64))
+                {
+                    Console.WriteLine("Private key is null or empty.");
+                    return string.Empty;
+                }
+
+                // Convert the Base64 string to bytes and import the private key
+                byte[] privateKeyBytes = Convert.FromBase64String(privateKeyBase64);
+                _dbRsaProvider.ImportRSAPrivateKey(privateKeyBytes, out _);
+
+                byte[] dataBytes = Convert.FromBase64String(encryptedData);
+                byte[] decryptedBytes = _dbRsaProvider.Decrypt(dataBytes, RSAEncryptionPadding.OaepSHA256);
+                Console.WriteLine($"Database decrypt successful, length: {decryptedBytes.Length} bytes");
+                return Encoding.UTF8.GetString(decryptedBytes);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Database decryption error: {ex.Message}");
+                return string.Empty;
+            }
+        }
+
+        public string DecryptCSharp(string encryptedDataParam, string privateKey)
+        {
+            using (RSA rsa = RSA.Create())
+            {
+                rsa.ImportRSAPrivateKey(Convert.FromBase64String(privateKey), out _);
+
+                // Decrypt the data
+                byte[] encryptedData = Convert.FromBase64String(encryptedDataParam);
+                byte[] decryptedData = rsa.Decrypt(encryptedData, RSAEncryptionPadding.OaepSHA256);
+                string decryptedText = Encoding.UTF8.GetString(decryptedData);
+
+                return decryptedText;
+
+            }
+
+        }
+
     }
 }

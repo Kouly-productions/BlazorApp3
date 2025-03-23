@@ -196,6 +196,7 @@ else
 
 // In Program.cs, add this line after your other endpoint mappings
 app.MapCompleteSignInEndpoint();
+app.MapCompleteRegistrationEndpoint();
 
 // This is the correct place for HTTPS redirection - AFTER configuring the error handlers
 app.UseHttpsRedirection();

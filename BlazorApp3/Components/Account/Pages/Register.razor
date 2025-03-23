@@ -6,6 +6,7 @@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.WebUtilities
 @using BlazorApp3.Data
+@using BlazorApp3.Services
 
 @inject UserManager<ApplicationUser> UserManager
 @inject IUserStore<ApplicationUser> UserStore
@@ -15,8 +16,7 @@
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 @inject RoleManager<IdentityRole> RoleManager
-@inject TodoDbContext TodoDb
-@inject BlazorApp3.Services.IHashingService HashingService
+@inject ITempAuthStateService TempAuthStateService
 
 <PageTitle>Register</PageTitle>
 
@@ -25,7 +25,7 @@
 <div class="row">
     <div class="col-lg-6">
         <StatusMessage Message="@Message" />
-        <EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
+        <EditForm Model="Input" method="post" OnValidSubmit="RegisterUser" FormName="register">
             <DataAnnotationsValidator />
             <h2>Create a new account.</h2>
             <hr />
@@ -34,11 +34,6 @@
                 <InputText @bind-Value="Input.Email" id="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
                 <label for="Input.Email">Email</label>
                 <ValidationMessage For="() => Input.Email" class="text-danger" />
-            </div>
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.CprNumber" id="Input.CprNumber" class="form-control" aria-required="true" placeholder="1234567890" maxlength="10" />
-                <label for="Input.CprNumber">CPR Number</label>
-                <ValidationMessage For="() => Input.CprNumber" class="text-danger" />
             </div>
             <div class="form-floating mb-3">
                 <InputText type="password" @bind-Value="Input.Password" id="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
@@ -60,7 +55,7 @@
                 <ValidationMessage For="() => Input.Role" class="text-danger" />
             </div>
 
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Continue</button>
         </EditForm>
     </div>
     <div class="col-lg-4 col-lg-offset-2">
@@ -83,98 +78,33 @@
 
     private string? Message => identityErrors is null ? null : $"Error: {string.Join(", ", identityErrors.Select(error => error.Description))}";
 
+    // In Register.razor, modify the RegisterUser method to:
     public async Task RegisterUser(EditContext editContext)
     {
-        // Validate CPR is exactly 10 digits
-        if (!Input.CprNumber.All(char.IsDigit) || Input.CprNumber.Length != 10)
+        // Validate input data
+        var userWithSameEmail = await UserManager.FindByEmailAsync(Input.Email);
+        if (userWithSameEmail != null)
         {
-            identityErrors = new[] { new IdentityError { Description = "CPR Number must be exactly 10 digits." } };
+            identityErrors = new[] { new IdentityError { Description = "User already exists with this email." } };
             return;
         }
 
-        var user = CreateUser();
-
-        await UserStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-        var emailStore = GetEmailStore();
-        await emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-        var result = await UserManager.CreateAsync(user, Input.Password);
-
-        if (!result.Succeeded)
+        if (string.IsNullOrEmpty(Input.Role))
         {
-            identityErrors = result.Errors;
+            identityErrors = new[] { new IdentityError { Description = "Please select a role." } };
             return;
         }
 
-        Logger.LogInformation("User created a new account with password.");
+        // Store registration data in TempAuthStateService
+        string token = TempAuthStateService.CreatePendingRegistration(
+            Input.Email,
+            Input.Password,
+            Input.Role,
+            ReturnUrl ?? "/"
+        );
 
-        // Add the user to the selected role
-        if (!string.IsNullOrEmpty(Input.Role))
-        {
-            // Ensure the role exists
-            if (!await RoleManager.RoleExistsAsync(Input.Role))
-            {
-                await RoleManager.CreateAsync(new IdentityRole(Input.Role));
-            }
-
-            // Add the user to the role
-            await UserManager.AddToRoleAsync(user, Input.Role);
-            Logger.LogInformation("User added to role: {Role}", Input.Role);
-        }
-
-        // Save CPR number to the database
-        var userId = await UserManager.GetUserIdAsync(user);
-
-        var cprRecord = new CprRecord
-            {
-                UserId = userId,
-                CprNumber = HashingService.PBKDF2(Input.CprNumber),
-                CreatedDate = DateTime.Now
-            };
-
-        await TodoDb.CprRecords.AddAsync(cprRecord);
-        await TodoDb.SaveChangesAsync();
-
-        Logger.LogInformation("CPR record saved for user: {UserId}", userId);
-
-        var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
-        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-        var callbackUrl = NavigationManager.GetUriWithQueryParameters(
-            NavigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
-            new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });
-
-        await EmailSender.SendConfirmationLinkAsync(user, Input.Email, HtmlEncoder.Default.Encode(callbackUrl));
-
-        if (UserManager.Options.SignIn.RequireConfirmedAccount)
-        {
-            RedirectManager.RedirectTo(
-                "Account/RegisterConfirmation",
-                new() { ["email"] = Input.Email, ["returnUrl"] = ReturnUrl });
-        }
-
-        await SignInManager.SignInAsync(user, isPersistent: false);
-        RedirectManager.RedirectTo(ReturnUrl);
-    }
-
-    private ApplicationUser CreateUser()
-    {
-        try
-        {
-            return Activator.CreateInstance<ApplicationUser>();
-        }
-        catch
-        {
-            throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
-                $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor.");
-        }
-    }
-
-    private IUserEmailStore<ApplicationUser> GetEmailStore()
-    {
-        if (!UserManager.SupportsUserEmail)
-        {
-            throw new NotSupportedException("The default UI requires a user store with email support.");
-        }
-        return (IUserEmailStore<ApplicationUser>)UserStore;
+        // Redirect to CPR verification page
+        NavigationManager.NavigateTo($"/Account/VerifyCprRegistration?token={token}");
     }
 
     private sealed class InputModel
@@ -183,12 +113,6 @@
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; } = "";
-
-        [Required]
-        [StringLength(10, ErrorMessage = "The {0} must be exactly 10 digits.", MinimumLength = 10)]
-        [RegularExpression(@"^\d{10}$", ErrorMessage = "The {0} must contain only digits.")]
-        [Display(Name = "CPR Number")]
-        public string CprNumber { get; set; } = "";
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -202,6 +126,6 @@
         public string ConfirmPassword { get; set; } = "";
 
         [Required(ErrorMessage = "Please select a role.")]
-        public string Role { get; set; }
+        public string Role { get; set; } = "";
     }
 }

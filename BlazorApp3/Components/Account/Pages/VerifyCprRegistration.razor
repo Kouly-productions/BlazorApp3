@@ -1,4 +1,4 @@
-﻿@page "/Account/RegisterCpr"
+﻿@page "/Account/VerifyCprRegistration"
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Identity
 @using BlazorApp3.Data
@@ -8,17 +8,17 @@
 @using System.Text.Encodings.Web
 @using Microsoft.AspNetCore.WebUtilities
 
+@inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @inject IUserStore<ApplicationUser> UserStore
-@inject SignInManager<ApplicationUser> SignInManager
 @inject IEmailSender<ApplicationUser> EmailSender
-@inject ILogger<RegisterCpr> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 @inject RoleManager<IdentityRole> RoleManager
 @inject TodoDbContext TodoDb
 @inject IHashingService HashingService
 @inject ITempAuthStateService TempAuthStateService
+@inject ILogger<VerifyCprRegistration> Logger
 
 @rendermode InteractiveServer
 
@@ -32,57 +32,57 @@
                 <div class="card-body">
                     @if (!string.IsNullOrEmpty(errorMessage))
                     {
-                            <div class="alert alert-danger" role="alert">
+                                <div class="alert alert-danger" role="alert">
                             @errorMessage
-                            </div>
+                                </div>
                     }
 
                     @if (isLoading)
                     {
-                            <div class="text-center p-4">
-                                <div class="spinner-border text-primary" role="status">
-                                    <span class="visually-hidden">Loading...</span>
+                                <div class="text-center p-4">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="mt-2">Verifying your session...</p>
                                 </div>
-                                <p class="mt-2">Verifying your session...</p>
-                            </div>
                     }
                     else if (validToken)
                     {
-                            <h3 class="card-title text-center mb-4">Enter Your CPR Number</h3>
-                            <p class="text-muted mb-4">Please enter your CPR number to complete the registration process.</p>
+                                <h3 class="card-title text-center mb-4">Enter Your CPR Number</h3>
+                                <p class="text-muted mb-4">Please enter your CPR number to complete the registration process.</p>
 
-                            <EditForm Model="Input" method="post" OnValidSubmit="CompleteRegistration" FormName="completeRegistration">
-                                <DataAnnotationsValidator />
+                                <EditForm Model="Input" method="post" OnValidSubmit="SaveCprNumber" FormName="saveRegistrationCpr">
+                                    <DataAnnotationsValidator />
 
-                                <div class="form-floating mb-4">
-                                    <InputText @bind-Value="Input.CprNumber" 
-                                            id="Input.CprNumber" 
-                                            class="form-control" 
-                                            placeholder="1234567890" 
-                                            aria-required="true" 
-                                            maxlength="10" />
-                                    <label for="Input.CprNumber" class="form-label">CPR Number</label>
-                                    <ValidationMessage For="() => Input.CprNumber" class="text-danger" />
-                                    <small class="form-text text-muted">Enter your 10-digit personal identification number.</small>
-                                </div>
+                                    <div class="form-floating mb-4">
+                                        <InputText @bind-Value="Input.CprNumber" 
+                                                id="Input.CprNumber" 
+                                                class="form-control" 
+                                                placeholder="1234567890" 
+                                                aria-required="true" 
+                                                maxlength="10" />
+                                        <label for="Input.CprNumber" class="form-label">CPR Number</label>
+                                        <ValidationMessage For="() => Input.CprNumber" class="text-danger" />
+                                        <small class="form-text text-muted">Enter your 10-digit personal identification number.</small>
+                                    </div>
 
-                                <div class="d-grid gap-2">
-                                    <button type="submit" class="btn btn-primary btn-lg">Complete Registration</button>
-                                    <a href="/Account/Register" class="btn btn-outline-secondary">Cancel</a>
-                                </div>
-                            </EditForm>
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-primary btn-lg">Complete Registration</button>
+                                        <a href="/Account/Register" class="btn btn-outline-secondary">Cancel</a>
+                                    </div>
+                                </EditForm>
                     }
                     else
                     {
-                            <div class="text-center p-4">
-                                <div class="alert alert-warning" role="alert">
-                                    <h4 class="alert-heading">Invalid Session</h4>
-                                    <p>Your registration session is invalid or has expired.</p>
-                                    <hr>
-                                    <p class="mb-0">Please return to the registration page to start again.</p>
+                                <div class="text-center p-4">
+                                    <div class="alert alert-warning" role="alert">
+                                        <h4 class="alert-heading">Invalid Session</h4>
+                                        <p>Your registration session is invalid or has expired.</p>
+                                        <hr>
+                                        <p class="mb-0">Please return to the registration page to start again.</p>
+                                    </div>
+                                    <a href="/Account/Register" class="btn btn-primary mt-3">Return to Registration</a>
                                 </div>
-                                <a href="/Account/Register" class="btn btn-primary mt-3">Return to Registration</a>
-                            </div>
                     }
                 </div>
             </div>
@@ -95,6 +95,7 @@
     private bool isLoading = true;
     private bool validToken = false;
     private PendingRegistration? pendingRegistration;
+    private string? pendingNavigationTarget = null;
 
     [SupplyParameterFromQuery]
     private string? token { get; set; }
@@ -119,7 +120,22 @@
         isLoading = false;
     }
 
-    private async Task CompleteRegistration()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        // Check if we have a pending navigation to perform
+        if (pendingNavigationTarget != null)
+        {
+            string target = pendingNavigationTarget;
+            pendingNavigationTarget = null; // Clear it to prevent multiple navigations
+
+            // Delay slightly to allow the render to complete
+            await Task.Delay(10);
+
+            NavigationManager.NavigateTo(target, forceLoad: true);
+        }
+    }
+
+    private async Task SaveCprNumber()
     {
         if (pendingRegistration == null)
         {
@@ -136,13 +152,14 @@
                 return;
             }
 
-            // Now create the user
+            // Create a new user
             var user = CreateUser();
 
             await UserStore.SetUserNameAsync(user, pendingRegistration.Email, CancellationToken.None);
             var emailStore = (IUserEmailStore<ApplicationUser>)UserStore;
             await emailStore.SetEmailAsync(user, pendingRegistration.Email, CancellationToken.None);
 
+            // Create the user with the password from pendingRegistration
             var result = await UserManager.CreateAsync(user, pendingRegistration.Password);
 
             if (!result.Succeeded)
@@ -153,7 +170,7 @@
 
             Logger.LogInformation("User created a new account with password.");
 
-            // Add the user to the selected role
+            // Add user to the role
             if (!string.IsNullOrEmpty(pendingRegistration.Role))
             {
                 // Ensure the role exists
@@ -167,9 +184,10 @@
                 Logger.LogInformation("User added to role: {Role}", pendingRegistration.Role);
             }
 
-            // Save CPR number to the database
+            // Get the new user ID
             var userId = await UserManager.GetUserIdAsync(user);
 
+            // Save CPR number to the database
             var cprRecord = new CprRecord
                 {
                     UserId = userId,
@@ -182,34 +200,32 @@
 
             Logger.LogInformation("CPR record saved for user: {UserId}", userId);
 
-            // Generate email confirmation code
-            var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
-            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var callbackUrl = NavigationManager.GetUriWithQueryParameters(
-                NavigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
-                new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = pendingRegistration.ReturnUrl });
-
-            await EmailSender.SendConfirmationLinkAsync(user, pendingRegistration.Email, HtmlEncoder.Default.Encode(callbackUrl));
-
-            // Remove the token as we don't need it anymore
             TempAuthStateService.RemovePendingRegistration(token);
 
-            // Sign in the user
+            // Send email confirmation if required
             if (UserManager.Options.SignIn.RequireConfirmedAccount)
             {
+                var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                var callbackUrl = NavigationManager.GetUriWithQueryParameters(
+                    NavigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
+                    new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = pendingRegistration.ReturnUrl });
+
+                await EmailSender.SendConfirmationLinkAsync(user, pendingRegistration.Email, HtmlEncoder.Default.Encode(callbackUrl));
+
+                // Redirect to confirmation page
                 RedirectManager.RedirectTo(
                     "Account/RegisterConfirmation",
                     new() { ["email"] = pendingRegistration.Email, ["returnUrl"] = pendingRegistration.ReturnUrl });
             }
             else
             {
-                await SignInManager.SignInAsync(user, isPersistent: false);
-                NavigationManager.NavigateTo(pendingRegistration.ReturnUrl ?? "/");
+                NavigationManager.NavigateTo($"/Account/CompleteRegistration?userId={userId}&returnUrl={Uri.EscapeDataString(pendingRegistration.ReturnUrl ?? "/")}", forceLoad: true);
             }
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Error during registration completion");
+            Logger.LogError(ex, "Error during CPR registration: {Message}", ex.Message);
             errorMessage = "An unexpected error occurred. Please try again.";
         }
     }

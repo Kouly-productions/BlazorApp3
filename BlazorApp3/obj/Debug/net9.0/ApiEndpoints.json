@@ -1,5 +1,32 @@
 [
   {
+    "ContainingType": "BlazorApp3.Endpoints.CompleteRegistrationEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapCompleteRegistrationEndpoint\u003Eb__0_0",
+    "RelativePath": "Account/CompleteRegistration",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "returnUrl",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "BlazorApp3.Endpoints.CompleteSignInEndpoint\u002B\u003C\u003Ec",
     "Method": "\u003CMapCompleteSignInEndpoint\u003Eb__0_0",
     "RelativePath": "Account/CompleteSignIn",
