@@ -1,0 +1,229 @@
+﻿@page "/Account/Cpr"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components.Authorization
+@using BlazorApp3.Data
+@using Microsoft.EntityFrameworkCore
+@inject BlazorApp3.Services.IHashingService HashingService
+
+<PageTitle>CPR Registration</PageTitle>
+
+<h1>CPR Registration</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Enter Your CPR Number</h3>
+            <div class="form-floating mb-3">
+                <input value="@CprNumber" @oninput="ValidateInput" id="cpr" class="form-control" maxlength="10" />
+                <label for="cpr">CPR Number:</label>
+            </div>
+
+            <button class="btn btn-primary mb-3" @onclick="SaveCpr">
+                Save CPR Number
+            </button>
+
+            @if (!string.IsNullOrEmpty(statusMessage))
+            {
+                    <div class="alert @messageClass" role="alert">
+                    @statusMessage
+                    </div>
+            }
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    Diagnostics
+                </div>
+                <div class="card-body">
+                    <p><strong>User ID:</strong> @userId</p>
+                    <p><strong>DB Connection:</strong> @dbStatus</p>
+                    <p><strong>Records in DB:</strong> @recordCount</p>
+                    <button class="btn btn-info" @onclick="RunDiagnostics">Refresh Diagnostics</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    // Define this class for the logger to reference
+    [System.Runtime.CompilerServices.CompilerGenerated]
+    public class CprPage : Microsoft.AspNetCore.Components.ComponentBase { }
+
+    private string CprNumber { get; set; } = "1234567890"; // Default test value
+    private string userId = "Loading...";
+    private string dbStatus = "Checking...";
+    private string recordCount = "Checking...";
+    private string statusMessage = "";
+    private string messageClass = "alert-info";
+
+    [Inject] private TodoDbContext TodoDb { get; set; }
+    [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    [Inject] private ILogger<CprPage> Logger { get; set; } // Changed from Cpr to CprPage
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RunDiagnostics();
+    }
+
+    private async Task RunDiagnostics()
+    {
+        statusMessage = "Running diagnostics...";
+        messageClass = "alert-info";
+        await InvokeAsync(StateHasChanged); // Force UI update
+
+        try
+        {
+            // Check user ID
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity?.IsAuthenticated == true)
+            {
+                userId = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "Not found";
+            }
+            else
+            {
+                userId = "Not authenticated";
+            }
+
+            // Check database connection
+            try
+            {
+                dbStatus = await TodoDb.Database.CanConnectAsync() ? "Connected" : "Failed";
+            }
+            catch (Exception ex)
+            {
+                dbStatus = "Error: " + ex.Message;
+            }
+
+            // Count records
+            try
+            {
+                recordCount = (await TodoDb.CprRecords.CountAsync()).ToString();
+            }
+            catch (Exception ex)
+            {
+                recordCount = "Error: " + ex.Message;
+            }
+
+            statusMessage = "Diagnostics complete!";
+            messageClass = "alert-success";
+        }
+        catch (Exception ex)
+        {
+            statusMessage = "Diagnostic error: " + ex.Message;
+            messageClass = "alert-danger";
+        }
+
+        await InvokeAsync(StateHasChanged); // Force UI update
+    }
+
+    private void ValidateInput(ChangeEventArgs e)
+    {
+        string input = e.Value?.ToString() ?? "";
+        CprNumber = new string(input.Where(char.IsDigit).ToArray());
+    }
+
+    private async Task SaveCpr()
+    {
+        statusMessage = "Saving CPR number...";
+        messageClass = "alert-info";
+        await InvokeAsync(StateHasChanged);
+
+        try
+        {
+            if (CprNumber.Length != 10)
+            {
+                statusMessage = "CPR number must be 10 digits";
+                messageClass = "alert-warning";
+                await InvokeAsync(StateHasChanged);
+                return;
+            }
+
+            // Get current user
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity?.IsAuthenticated != true)
+            {
+                statusMessage = "You must be logged in to save a CPR number";
+                messageClass = "alert-danger";
+                await InvokeAsync(StateHasChanged);
+                return;
+            }
+
+            string currentUserId = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+                statusMessage = "Could not determine user ID";
+                messageClass = "alert-danger";
+                await InvokeAsync(StateHasChanged);
+                return;
+            }
+
+            Logger.LogInformation($"Saving CPR number for user: {currentUserId}");
+
+            // Hash the CPR number using PBKDF2 before storing it
+            string hashedCpr = HashingService.PBKDF2(CprNumber);
+
+            // Check for existing record
+            var existingRecord = await TodoDb.CprRecords
+                .FirstOrDefaultAsync(c => c.UserId == currentUserId);
+
+            if (existingRecord != null)
+            {
+                Logger.LogInformation($"Found existing record with ID: {existingRecord.Id}");
+                // Update existing record
+                existingRecord.CprNumber = hashedCpr;
+                TodoDb.CprRecords.Update(existingRecord);
+                statusMessage = "Updating existing CPR record...";
+            }
+            else
+            {
+                Logger.LogInformation("No existing record found, creating new one");
+                // Create new record
+                var newRecord = new CprRecord
+                    {
+                        UserId = currentUserId,
+                        CprNumber = hashedCpr,
+                        CreatedDate = DateTime.Now
+                    };
+
+                await TodoDb.CprRecords.AddAsync(newRecord);
+                statusMessage = "Creating new CPR record...";
+            }
+
+            await InvokeAsync(StateHasChanged);
+
+            // Save changes
+            int result = await TodoDb.SaveChangesAsync();
+            Logger.LogInformation($"SaveChangesAsync result: {result}");
+
+            if (result > 0)
+            {
+                statusMessage = "CPR number saved successfully!";
+                messageClass = "alert-success";
+            }
+            else
+            {
+                statusMessage = "No changes were saved (0 records affected)";
+                messageClass = "alert-warning";
+                Logger.LogWarning("SaveChangesAsync returned 0 - no records were modified");
+            }
+
+            // Refresh count after save
+            recordCount = (await TodoDb.CprRecords.CountAsync()).ToString();
+        }
+        catch (Exception ex)
+        {
+            statusMessage = "Error: " + ex.Message;
+            messageClass = "alert-danger";
+            Logger.LogError(ex, "Error saving CPR number");
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+}

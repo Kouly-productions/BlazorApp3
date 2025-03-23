@@ -1,9 +1,13 @@
-﻿@if (!string.IsNullOrEmpty(DisplayMessage))
+﻿@using Microsoft.AspNetCore.Http
+
+@inject IHttpContextAccessor HttpContextAccessor
+
+@if (!string.IsNullOrEmpty(DisplayMessage))
 {
     var statusMessageClass = DisplayMessage.StartsWith("Error") ? "danger" : "success";
-    <div class="alert alert-@statusMessageClass" role="alert">
+        <div class="alert alert-@statusMessageClass" role="alert">
         @DisplayMessage
-    </div>
+        </div>
 }
 
 @code {
@@ -12,18 +16,23 @@
     [Parameter]
     public string? Message { get; set; }
 
-    [CascadingParameter]
-    private HttpContext HttpContext { get; set; } = default!;
+    // Remove the CascadingParameter
+    // [CascadingParameter]
+    // private HttpContext HttpContext { get; set; } = default!;
 
     private string? DisplayMessage => Message ?? messageFromCookie;
 
     protected override void OnInitialized()
     {
-        messageFromCookie = HttpContext.Request.Cookies[IdentityRedirectManager.StatusCookieName];
+        var httpContext = HttpContextAccessor.HttpContext;
 
-        if (messageFromCookie is not null)
+        if (httpContext != null)
         {
-            HttpContext.Response.Cookies.Delete(IdentityRedirectManager.StatusCookieName);
+            messageFromCookie = httpContext.Request.Cookies[IdentityRedirectManager.StatusCookieName];
+            if (messageFromCookie is not null)
+            {
+                httpContext.Response.Cookies.Delete(IdentityRedirectManager.StatusCookieName);
+            }
         }
     }
 }

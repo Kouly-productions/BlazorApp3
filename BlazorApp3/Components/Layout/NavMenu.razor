@@ -1,5 +1,7 @@
 ﻿@implements IDisposable
 @inject NavigationManager NavigationManager
+@using Microsoft.AspNetCore.Identity
+
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">BlazorApp3</a>
@@ -14,18 +16,13 @@
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="nav flex-column">
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+            <NavLink class="nav-link" href="Account/Cpr" Match="NavLinkMatch.All">
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
+            <NavLink class="nav-link" href="s">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Connection Checker
             </NavLink>
         </div>
         <div class="nav-item px-3">
@@ -33,11 +30,31 @@
                 <span class="bi bi-lock-nav-menu" aria-hidden="true"></span> Auth Required
             </NavLink>
         </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="encryption-demo">
+                <span class="bi bi-lock-nav-menu" aria-hidden="true"></span> Encryption Demo
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="asymmetric-demo">
+                <span class="bi bi-lock-nav-menu" aria-hidden="true"></span> Asymmetric Demo
+            </NavLink>
+        </div>
         <AuthorizeView>
             <Authorized>
+                <!-- Add the Todo link here -->
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="Todo">
+                        <span class="bi bi-check2-square" aria-hidden="true"></span> Todo List
+                    </NavLink>
+                </div>
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="Account/Manage">
-                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> @context.User.Identity?.Name
+                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> 
+                        @{
+                            string role = context.User.IsInRole("Admin") ? "Admin" : "User";
+                            @context.User.Identity?.Name <span class="badge bg-secondary">@role</span>
+                        }
                     </NavLink>
                 </div>
                 <!-- Add the 2FA link here, inside the first Authorized block -->

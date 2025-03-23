@@ -1,0 +1,75 @@
+﻿@page "/encryption-demo"
+@using BlazorApp3.Services
+@rendermode InteractiveServer
+@inject IEncryptionService EncryptionService
+
+<PageTitle>Encryption Demo</PageTitle>
+
+<h1>Symmetric Encryption Demo</h1>
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Test Encryption</h3>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="plaintext" class="form-label">Text to Encrypt:</label>
+                        <textarea @bind="PlainText" id="plaintext" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="ciphertext" class="form-label">Encrypted Text:</label>
+                        <textarea @bind="CipherText" id="ciphertext" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="decrypted" class="form-label">Decrypted Text:</label>
+                        <textarea @bind="DecryptedText" id="decrypted" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="privateKey" class="form-label">Private Key:</label>
+                        <input @bind="PrivateKey" id="privateKey" class="form-control" />
+                        <small class="text-muted">Must be 16, 24, or 32 characters for AES-128, AES-192, or AES-256.</small>
+                    </div>
+
+                    <button class="btn btn-primary me-2" @onclick="PerformEncryption">Encrypt</button>
+                    <button class="btn btn-secondary" @onclick="PerformDecryption">Decrypt</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string PlainText { get; set; } = "Hello, this is a test message for encryption!";
+    private string CipherText { get; set; } = "";
+    private string DecryptedText { get; set; } = "";
+
+    private string _privateKey;
+    private string PrivateKey
+    {
+        get => _privateKey ?? EncryptionService.PrivateKey;
+        set
+        {
+            _privateKey = value;
+            if (!string.IsNullOrEmpty(value))
+            {
+                EncryptionService.PrivateKey = value;
+            }
+        }
+    }
+
+    private void PerformEncryption()
+    {
+        CipherText = EncryptionService.Encrypt(PlainText);
+    }
+
+    private void PerformDecryption()
+    {
+        DecryptedText = EncryptionService.Decrypt(CipherText);
+    }
+}
