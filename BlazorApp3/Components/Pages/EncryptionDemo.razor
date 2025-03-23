@@ -1,7 +1,9 @@
 ﻿@page "/encryption-demo"
 @using BlazorApp3.Services
+@using Microsoft.AspNetCore.Authorization
 @rendermode InteractiveServer
 @inject IEncryptionService EncryptionService
+@attribute [Authorize]
 
 <PageTitle>Encryption Demo</PageTitle>
 

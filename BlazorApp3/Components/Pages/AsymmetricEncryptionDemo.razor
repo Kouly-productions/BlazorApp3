@@ -1,6 +1,8 @@
 ﻿@page "/asymmetric-demo"
 @rendermode InteractiveServer
 @using BlazorApp3.Services
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
 
 @inject IAsymmetricEncryptionService AsymmetricEncryptionService
 @inject IApiClientService ApiClientService
