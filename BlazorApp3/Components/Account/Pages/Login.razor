@@ -5,14 +5,14 @@
 @using Microsoft.AspNetCore.Identity
 @using BlazorApp3.Data
 @using Microsoft.EntityFrameworkCore
+@using BlazorApp3.Services
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @inject ILogger<Login> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
-@inject TodoDbContext TodoDb
-@inject BlazorApp3.Services.IHashingService HashingService
+@inject ITempAuthStateService TempAuthStateService
 
 <PageTitle>Log in</PageTitle>
 
@@ -36,16 +36,6 @@
                     <label for="Input.Password" class="form-label">Password</label>
                     <ValidationMessage For="() => Input.Password" class="text-danger" />
                 </div>
-                <div class="form-floating mb-3">
-                    <InputText @bind-Value="Input.CprNumber" 
-                               id="Input.CprNumber" 
-                               class="form-control" 
-                               placeholder="1234567890" 
-                               aria-required="true" 
-                               maxlength="10" />
-                    <label for="Input.CprNumber" class="form-label">CPR Number</label>
-                    <ValidationMessage For="() => Input.CprNumber" class="text-danger" />
-                </div>
                 <div class="checkbox mb-3">
                     <label class="form-label">
                         <InputCheckbox @bind-Value="Input.RememberMe" class="darker-border-checkbox form-check-input" />
@@ -53,7 +43,7 @@
                     </label>
                 </div>
                 <div>
-                    <button type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+                    <button type="submit" class="w-100 btn btn-lg btn-primary">Continue</button>
                 </div>
                 <div>
                     <p>
@@ -113,34 +103,15 @@
         var result = await SignInManager.CheckPasswordSignInAsync(user, Input.Password, lockoutOnFailure: false);
         if (result.Succeeded)
         {
-            // Check the CPR number
-            var cprRecord = await TodoDb.CprRecords.FirstOrDefaultAsync(c => c.UserId == user.Id);
-            if (cprRecord != null && HashingService.VerifyHash(Input.CprNumber, cprRecord.CprNumber, "PBKDF2"))
-            {
-                // All credentials match, sign in the user
-                await SignInManager.SignInAsync(user, Input.RememberMe);
-                Logger.LogInformation("User logged in.");
-                RedirectManager.RedirectTo(ReturnUrl ?? "/Todo");
-            }
-            else
-            {
-                errorMessage = "Invalid login attempt.";
-            }
+            // Email and password are correct, create temporary token and redirect to CPR verification
+            string token = TempAuthStateService.CreatePendingAuth(user.Id, Input.RememberMe, ReturnUrl);
+            NavigationManager.NavigateTo($"/Account/VerifyCpr?token={token}");
         }
         else if (result.RequiresTwoFactor)
         {
-            // Check CPR number before proceeding to two-factor authentication
-            var cprRecord = await TodoDb.CprRecords.FirstOrDefaultAsync(c => c.UserId == user.Id);
-            if (cprRecord != null && HashingService.VerifyHash(Input.CprNumber, cprRecord.CprNumber, "PBKDF2"))
-            {
-                RedirectManager.RedirectTo(
-                    "Account/LoginWith2fa",
-                    new() { ["returnUrl"] = ReturnUrl, ["rememberMe"] = Input.RememberMe });
-            }
-            else
-            {
-                errorMessage = "Invalid login attempt.";
-            }
+            RedirectManager.RedirectTo(
+                "Account/LoginWith2fa",
+                new() { ["returnUrl"] = ReturnUrl, ["rememberMe"] = Input.RememberMe });
         }
         else if (result.IsLockedOut)
         {
@@ -162,10 +133,6 @@
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; } = "";
-
-        [Required]
-        [RegularExpression(@"^\d{10}$", ErrorMessage = "CPR number must be exactly 10 digits")]
-        public string CprNumber { get; set; } = "";
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }

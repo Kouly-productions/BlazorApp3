@@ -1,5 +1,37 @@
 [
   {
+    "ContainingType": "BlazorApp3.Endpoints.CompleteSignInEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapCompleteSignInEndpoint\u003Eb__0_0",
+    "RelativePath": "Account/CompleteSignIn",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "rememberMe",
+        "Type": "System.Boolean",
+        "IsRequired": true
+      },
+      {
+        "Name": "returnUrl",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "Microsoft.AspNetCore.Routing.IdentityComponentsEndpointRouteBuilderExtensions\u002B\u003C\u003Ec",
     "Method": "\u003CMapAdditionalIdentityEndpoints\u003Eb__0_1",
     "RelativePath": "Account/Logout",

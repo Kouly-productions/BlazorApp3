@@ -144,6 +144,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBY2NvdW50XFBhZ2VzXFJlZ2lzdGVyQ29uZmlybWF0aW9uLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Muchi/Desktop/SchoolProgramming/BlazorApp3/BlazorApp3/Components/Account/Pages/RegisterCpr.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBY2NvdW50XFBhZ2VzXFJlZ2lzdGVyQ3ByLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Muchi/Desktop/SchoolProgramming/BlazorApp3/BlazorApp3/Components/Account/Pages/ResendEmailConfirmation.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBY2NvdW50XFBhZ2VzXFJlc2VuZEVtYWlsQ29uZmlybWF0aW9uLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
@@ -154,6 +158,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Muchi/Desktop/SchoolProgramming/BlazorApp3/BlazorApp3/Components/Account/Pages/ResetPasswordConfirmation.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBY2NvdW50XFBhZ2VzXFJlc2V0UGFzc3dvcmRDb25maXJtYXRpb24ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Muchi/Desktop/SchoolProgramming/BlazorApp3/BlazorApp3/Components/Account/Pages/VerifyCpr.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBY2NvdW50XFBhZ2VzXFZlcmlmeUNwci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Muchi/Desktop/SchoolProgramming/BlazorApp3/BlazorApp3/Components/Account/Pages/_Imports.razor]
@@ -222,10 +230,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Muchi/Desktop/SchoolProgramming/BlazorApp3/BlazorApp3/Components/Pages/Todo.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xUb2RvLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Muchi/Desktop/SchoolProgramming/BlazorApp3/BlazorApp3/Components/Pages/VerifyCpr.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xWZXJpZnlDcHIucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Muchi/Desktop/SchoolProgramming/BlazorApp3/BlazorApp3/Components/Pages/Weather.razor]

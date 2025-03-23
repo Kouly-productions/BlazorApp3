@@ -7,6 +7,7 @@ using BlazorApp3.Components.Account;
 using BlazorApp3.Data;
 using Microsoft.AspNetCore.Mvc;
 using BlazorApp3.Services;
+using BlazorApp3.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,7 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
+builder.Services.AddSingleton<BlazorApp3.Services.ITempAuthStateService, BlazorApp3.Services.TempAuthStateService>();
 
 // Add authorization services
 builder.Services.AddAuthorization();
@@ -191,6 +193,9 @@ else
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
     app.UseHsts();
 }
+
+// In Program.cs, add this line after your other endpoint mappings
+app.MapCompleteSignInEndpoint();
 
 // This is the correct place for HTTPS redirection - AFTER configuring the error handlers
 app.UseHttpsRedirection();
